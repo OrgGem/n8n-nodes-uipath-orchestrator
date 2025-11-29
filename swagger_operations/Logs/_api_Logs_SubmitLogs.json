@@ -1,0 +1,47 @@
+{
+  "path": "/api/Logs/SubmitLogs",
+  "operations": {
+    "post": {
+      "tags": [
+        "Logs"
+      ],
+      "summary": "Inserts a collection of log entries, each in a specific JSON format.",
+      "description": "OAuth required scopes: OR.Monitoring or OR.Monitoring.Write.\r\n\r\nRequired permissions: (Logs.Create).\r\n\r\nExample of log entry:\r\n     {\r\n         \"message\": \"TTT execution started\",\r\n         \"level\": \"Information\",\r\n         \"timeStamp\": \"2017-01-18T14:46:07.4152893+02:00\",\r\n         \"windowsIdentity\": \"DESKTOP-1L50L0P\\\\WindowsUser\",\r\n         \"agentSessionId\": \"00000000-0000-0000-0000-000000000000\",\r\n         \"processName\": \"TTT\",\r\n         \"fileName\": \"Main\",\r\n         \"jobId\": \"8066c309-cef8-4b47-9163-b273fc14cc43\"\r\n     }",
+      "operationId": "Logs_SubmitLogs",
+      "consumes": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "in": "body",
+          "name": "body",
+          "description": "Collection of string representations of JSON objects",
+          "schema": {
+            "description": "Collection of string representations of JSON objects",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successfully inserts the log entries"
+        },
+        "400": {
+          "description": "logs is null or an Exception is thrown during insert"
+        },
+        "408": {
+          "description": "Too many pending logging requests or timeout"
+        }
+      },
+      "security": [
+        {
+          "OAuth2": []
+        }
+      ]
+    }
+  },
+  "documentationLink": "https://docs.uipath.com/orchestrator/reference"
+}

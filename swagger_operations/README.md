@@ -71,7 +71,7 @@ This documentation provides comprehensive API specifications for UiPath Orchestr
 
 ---
 
-### Monitoring & Alerting (9 operations)
+### Monitoring & Alerting (15 operations)
 
 **OAuth Scope:** `OR.Monitoring`
 
@@ -82,7 +82,15 @@ This documentation provides comprehensive API specifications for UiPath Orchestr
   - License consumption | Entity counts | Job statistics
   - License utilization | Robot/Session status
 
-**Files:** 2 overview files  
+- **[RobotLogs](./RobotLogs/)** - Robot execution logs retrieval
+  - Get robot logs | Export logs to CSV | Get total count
+  - Generate reports
+  
+- **[Logs](./Logs/)** - Log entry submission
+  - Submit single log (deprecated) | Submit batch logs
+  - Robot and application logging
+
+**Files:** 10 files (4 overview files + 6 individual operations)  
 **Coverage:** 100% of monitoring endpoints
 
 ---
@@ -131,8 +139,8 @@ This documentation provides comprehensive API specifications for UiPath Orchestr
 
 | Metric | Value |
 |--------|-------|
-| **Total Operations** | 72+ |
-| **Total Files** | 58+ |
+| **Total Operations** | 78+ |
+| **Total Files** | 68+ |
 | **OAuth Scopes** | 8 |
 | **Total Lines** | 20,000+ |
 | **Code Examples** | 200+ |
@@ -396,6 +404,8 @@ swagger_operations/
 ├── Alerts/               (1 file)
 ├── AuditLogs/            (1 file)
 ├── Stats/                (1 file)
+├── RobotLogs/            (5 files)
+├── Logs/                 (3 files)
 ├── Calendars/            (1 file)
 ├── Folders/              (1 file)
 ├── QueueItemComments/    (1 file)

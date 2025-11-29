@@ -1,0 +1,42 @@
+{
+  "path": "/api/Logs",
+  "operations": {
+    "post": {
+      "tags": [
+        "Logs"
+      ],
+      "summary": "Inserts a log entry with a specified message in JSON format.",
+      "description": "OAuth required scopes: OR.Monitoring or OR.Monitoring.Write.\r\n\r\nRequired permissions: (Logs.Create).\r\n\r\nExample of jMessage parameter.\r\n            \r\n     {\r\n         \"message\": \"TTT execution started\",\r\n         \"level\": \"Information\",\r\n         \"timeStamp\": \"2017-01-18T14:46:07.4152893+02:00\",\r\n         \"windowsIdentity\": \"DESKTOP-1L50L0P\\\\WindowsUser\",\r\n         \"agentSessionId\": \"00000000-0000-0000-0000-000000000000\",\r\n         \"processName\": \"TTT\",\r\n         \"fileName\": \"Main\",\r\n         \"jobId\": \"8066c309-cef8-4b47-9163-b273fc14cc43\"\r\n     }\r\nDEPRECATED: \r\nUse SubmitLogs instead\r\nPlease refer to https://docs.uipath.com/orchestrator/reference",
+      "operationId": "Logs_Post",
+      "consumes": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "in": "body",
+          "name": "body",
+          "description": "",
+          "schema": {}
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Successfully inserts a log message. Although it's a post, there's no need for an object to be returned"
+        },
+        "400": {
+          "description": "jMessage is null or an Exception is thrown during insert"
+        },
+        "408": {
+          "description": "Too many pending logging requests or timeout"
+        }
+      },
+      "deprecated": true,
+      "security": [
+        {
+          "OAuth2": []
+        }
+      ]
+    }
+  },
+  "documentationLink": "https://docs.uipath.com/orchestrator/reference"
+}

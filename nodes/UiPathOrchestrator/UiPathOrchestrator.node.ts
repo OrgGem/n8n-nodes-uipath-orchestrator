@@ -17,6 +17,8 @@ import { assetsOperations, assetsFields } from './resources/Assets';
 import { bucketsOperations, bucketsFields } from './resources/Buckets';
 import { queuesOperations, queuesFields } from './resources/Queues';
 import { auditLogsOperations, auditLogsFields } from './resources/AuditLogs';
+import { robotLogsOperations, robotLogsFields } from './resources/RobotLogs';
+import { logsOperations, logsFields } from './resources/Logs';
 
 // Import operation handlers
 import { executeFoldersOperations } from './operations/folders';
@@ -29,6 +31,8 @@ import { executeAssetsOperations } from './operations/assets';
 import { executeBucketsOperations } from './operations/buckets';
 import { executeQueuesOperations } from './operations/queues';
 import { executeAuditLogsOperations } from './operations/auditLogs';
+import { executeRobotLogsOperations } from './operations/robotLogs';
+import { executeLogsOperations } from './operations/logs';
 
 export class UiPathOrchestrator implements INodeType {
 	description: INodeTypeDescription = {
@@ -97,6 +101,14 @@ export class UiPathOrchestrator implements INodeType {
 						name: 'Audit Logs',
 						value: 'auditLogs',
 					},
+					{
+						name: 'Robot Logs',
+						value: 'robotLogs',
+					},
+					{
+						name: 'Logs',
+						value: 'logs',
+					},
 				],
 				default: 'folders',
 			},
@@ -120,6 +132,10 @@ export class UiPathOrchestrator implements INodeType {
 			...queuesFields,
 			...auditLogsOperations,
 			...auditLogsFields,
+			...robotLogsOperations,
+			...robotLogsFields,
+			...logsOperations,
+			...logsFields,
 		],
 	};
 
@@ -162,6 +178,12 @@ export class UiPathOrchestrator implements INodeType {
 						break;
 					case 'auditLogs':
 						responseData = await executeAuditLogsOperations.call(this, i, operation);
+						break;
+					case 'robotLogs':
+						responseData = await executeRobotLogsOperations.call(this, i, operation);
+						break;
+					case 'logs':
+						responseData = await executeLogsOperations.call(this, i, operation);
 						break;
 					default:
 						throw new NodeOperationError(
