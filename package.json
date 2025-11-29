@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-uipath-orchestrator",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "description": "n8n node for UiPath Orchestrator API",
   "keywords": [
     "n8n-community-node-package",
