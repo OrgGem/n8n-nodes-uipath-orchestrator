@@ -70,7 +70,6 @@ export async function executeQueuesOperations(
 			'/odata/Queues/UiPathODataSvc.AddQueueItem',
 			body
 		);
-		responseData = responseData.value[0]; // Extract first item from OData array
 	} else if (operation === 'bulkAddQueueItems') {
 		const queueName = this.getNodeParameter('queueName', i) as string;
 		const commitType = this.getNodeParameter('commitType', i, 'AllOrNothing') as string;
@@ -132,7 +131,6 @@ export async function executeQueuesOperations(
 			'/odata/Queues/UiPathODataSvc.BulkAddQueueItems',
 			body,
 		);
-		responseData = responseData.value; // Handle OData response format
 	} else if (operation === 'getQueueItems') {
 		const filter = this.getNodeParameter('filter', i) as string;
 		const top = this.getNodeParameter('top', i) as number;
