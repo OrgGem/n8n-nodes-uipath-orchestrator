@@ -77,14 +77,11 @@ export async function executeProcessesOperations(
 			throw new NodeOperationError(this.getNode(), 'Process key is required');
 		}
 		
-		// URL encode the process key to handle special characters
-		let url = `/odata/Releases/UiPath.Server.Configuration.OData.GetArguments(key='${encodeURIComponent(processKey)}')`;
-		const queryParams: string[] = [];
-		if (expand) queryParams.push(`$expand=${expand}`);
-		if (select) queryParams.push(`$select=${select}`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
+		const qs: any = {};
+		if (expand) qs.$expand = expand;
+		if (select) qs.$select = select;
 		
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/Releases/UiPath.Server.Configuration.OData.GetArguments(key='${encodeURIComponent(processKey)}')`, {}, qs);
 		
 		// Normalize response structure
 		if (responseData && responseData.value !== undefined) {
@@ -106,20 +103,17 @@ export async function executeProcessesOperations(
 			throw new NodeOperationError(this.getNode(), 'Process ID is required');
 		}
 
-		// URL encode the process ID to handle special characters
-		let url = `/odata/Releases/UiPath.Server.Configuration.OData.GetProcessVersions(processId='${encodeURIComponent(processId)}')`;
-		const queryParams: string[] = [];
-		if (feedId) queryParams.push(`feedId=${encodeURIComponent(feedId)}`);
-		if (expand) queryParams.push(`$expand=${expand}`);
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (select) queryParams.push(`$select=${select}`);
-		if (orderby) queryParams.push(`$orderby=${orderby}`);
-		if (top && top > 0) queryParams.push(`$top=${Math.min(top, 1000)}`);
-		if (skip && skip > 0) queryParams.push(`$skip=${skip}`);
-		if (count) queryParams.push(`$count=true`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
+		const qs: any = {};
+		if (feedId) qs.feedId = feedId;
+		if (expand) qs.$expand = expand;
+		if (filter) qs.$filter = filter;
+		if (select) qs.$select = select;
+		if (orderby) qs.$orderby = orderby;
+		if (top && top > 0) qs.$top = Math.min(top, 1000);
+		if (skip && skip > 0) qs.$skip = skip;
+		if (count) qs.$count = true;
 		
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/Releases/UiPath.Server.Configuration.OData.GetProcessVersions(processId='${encodeURIComponent(processId)}')`, {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'uploadPackage') {
 		const feedId = this.getNodeParameter('feedIdUpload', i, '') as string;

@@ -42,30 +42,26 @@ export async function executeBucketsOperations(
 		const skip = this.getNodeParameter('skip', i) as number;
 		const count = this.getNodeParameter('count', i) as boolean;
 
-		let url = '/odata/Buckets';
-		const queryParams: string[] = [];
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (select) queryParams.push(`$select=${select}`);
-		if (orderby) queryParams.push(`$orderby=${orderby}`);
-		if (top && top > 0) queryParams.push(`$top=${Math.min(top, 1000)}`);
-		if (skip && skip > 0) queryParams.push(`$skip=${skip}`);
-		if (count) queryParams.push(`$count=true`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
+		const qs: any = {};
+		if (filter) qs.$filter = filter;
+		if (select) qs.$select = select;
+		if (orderby) qs.$orderby = orderby;
+		if (top && top > 0) qs.$top = Math.min(top, 1000);
+		if (skip && skip > 0) qs.$skip = skip;
+		if (count) qs.$count = true;
 
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Buckets', {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'getBucket') {
 		const bucketId = this.getNodeParameter('bucketId', i) as string;
 		const expand = this.getNodeParameter('expand', i) as string;
 		const select = this.getNodeParameter('select', i) as string;
 
-		let url = `/odata/Buckets(${bucketId})`;
-		const queryParams: string[] = [];
-		if (expand) queryParams.push(`$expand=${expand}`);
-		if (select) queryParams.push(`$select=${select}`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
+		const qs: any = {};
+		if (expand) qs.$expand = expand;
+		if (select) qs.$select = select;
 
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/Buckets(${bucketId})`, {}, qs);
 	} else if (operation === 'updateBucket') {
 		const bucketId = this.getNodeParameter('bucketId', i) as string;
 		const description = this.getNodeParameter('description', i) as string;
@@ -86,14 +82,12 @@ export async function executeBucketsOperations(
 		const top = this.getNodeParameter('top', i) as number;
 		const skip = this.getNodeParameter('skip', i) as number;
 
-		let url = `/odata/Buckets(${bucketId})/UiPath.Server.Configuration.OData.GetDirectories`;
-		const queryParams: string[] = [];
-		if (directory) queryParams.push(`directory=${encodeURIComponent(directory)}`);
-		if (top && top > 0) queryParams.push(`$top=${top}`);
-		if (skip && skip > 0) queryParams.push(`$skip=${skip}`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
+		const qs: any = {};
+		if (directory) qs.directory = directory;
+		if (top && top > 0) qs.$top = top;
+		if (skip && skip > 0) qs.$skip = skip;
 
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/Buckets(${bucketId})/UiPath.Server.Configuration.OData.GetDirectories`, {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'listFiles') {
 		const bucketId = this.getNodeParameter('bucketId', i) as string;
@@ -103,16 +97,14 @@ export async function executeBucketsOperations(
 		const top = this.getNodeParameter('top', i) as number;
 		const skip = this.getNodeParameter('skip', i) as number;
 
-		let url = `/odata/Buckets(${bucketId})/UiPath.Server.Configuration.OData.GetFiles`;
-		const queryParams: string[] = [];
-		if (directory) queryParams.push(`directory=${encodeURIComponent(directory)}`);
-		if (recursive !== undefined) queryParams.push(`recursive=${recursive}`);
-		if (fileNameGlob) queryParams.push(`fileNameGlob=${encodeURIComponent(fileNameGlob)}`);
-		if (top && top > 0) queryParams.push(`$top=${Math.min(top, 1000)}`);
-		if (skip && skip > 0) queryParams.push(`$skip=${skip}`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
+		const qs: any = {};
+		if (directory) qs.directory = directory;
+		if (recursive !== undefined) qs.recursive = recursive;
+		if (fileNameGlob) qs.fileNameGlob = fileNameGlob;
+		if (top && top > 0) qs.$top = Math.min(top, 1000);
+		if (skip && skip > 0) qs.$skip = skip;
 
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/Buckets(${bucketId})/UiPath.Server.Configuration.OData.GetFiles`, {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'getFile') {
 		const bucketId = this.getNodeParameter('bucketId', i) as string;
@@ -229,18 +221,16 @@ export async function executeBucketsOperations(
 		const skip = this.getNodeParameter('skip', i, 0) as number;
 		const count = this.getNodeParameter('count', i, false) as boolean;
 		
-		let url = '/odata/Buckets/UiPath.Server.Configuration.OData.GetBucketsAcrossFolders';
-		const queryParams: string[] = [];
-		if (excludeFolderId) queryParams.push(`excludeFolderId=${encodeURIComponent(excludeFolderId)}`);
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (select) queryParams.push(`$select=${select}`);
-		if (orderby) queryParams.push(`$orderby=${orderby}`);
-		if (top > 0) queryParams.push(`$top=${Math.min(top, 1000)}`);
-		if (skip > 0) queryParams.push(`$skip=${skip}`);
-		if (count) queryParams.push(`$count=true`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
+		const qs: any = {};
+		if (excludeFolderId) qs.excludeFolderId = excludeFolderId;
+		if (filter) qs.$filter = filter;
+		if (select) qs.$select = select;
+		if (orderby) qs.$orderby = orderby;
+		if (top > 0) qs.$top = Math.min(top, 1000);
+		if (skip > 0) qs.$skip = skip;
+		if (count) qs.$count = true;
 		
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Buckets/UiPath.Server.Configuration.OData.GetBucketsAcrossFolders', {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'getFoldersForBucket') {
 		const bucketId = this.getNodeParameter('bucketId', i) as string;
@@ -251,13 +241,11 @@ export async function executeBucketsOperations(
 			throw new NodeOperationError(this.getNode(), 'Bucket ID is required');
 		}
 		
-		let url = `/odata/Buckets/UiPath.Server.Configuration.OData.GetFoldersForBucket(id=${bucketId})`;
-		const queryParams: string[] = [];
-		if (expand) queryParams.push(`$expand=${expand}`);
-		if (select) queryParams.push(`$select=${select}`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
+		const qs: any = {};
+		if (expand) qs.$expand = expand;
+		if (select) qs.$select = select;
 		
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/Buckets/UiPath.Server.Configuration.OData.GetFoldersForBucket(id=${encodeURIComponent(bucketId)})`, {}, qs);
 		responseData = responseData.value || responseData;
 	}
 

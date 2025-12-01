@@ -19,6 +19,7 @@ import { queuesOperations, queuesFields } from './resources/Queues';
 import { auditLogsOperations, auditLogsFields } from './resources/AuditLogs';
 import { robotLogsOperations, robotLogsFields } from './resources/RobotLogs';
 import { logsOperations, logsFields } from './resources/Logs';
+import { customApiCallOperations, customApiCallFields } from './resources/CustomApiCall';
 
 // Import operation handlers
 import { executeFoldersOperations } from './operations/folders';
@@ -33,6 +34,7 @@ import { executeQueuesOperations } from './operations/queues';
 import { executeAuditLogsOperations } from './operations/auditLogs';
 import { executeRobotLogsOperations } from './operations/robotLogs';
 import { executeLogsOperations } from './operations/logs';
+import { executeCustomApiCallOperations } from './operations/customApiCall';
 
 export class UiPathOrchestrator implements INodeType {
 	description: INodeTypeDescription = {
@@ -109,6 +111,10 @@ export class UiPathOrchestrator implements INodeType {
 						name: 'Logs',
 						value: 'logs',
 					},
+					{
+						name: 'Custom API Call',
+						value: 'customApiCall',
+					},
 				],
 				default: 'folders',
 			},
@@ -136,6 +142,8 @@ export class UiPathOrchestrator implements INodeType {
 			...robotLogsFields,
 			...logsOperations,
 			...logsFields,
+			...customApiCallOperations,
+			...customApiCallFields,
 		],
 	};
 
@@ -184,6 +192,9 @@ export class UiPathOrchestrator implements INodeType {
 						break;
 					case 'logs':
 						responseData = await executeLogsOperations.call(this, i, operation);
+						break;
+					case 'customApiCall':
+						responseData = await executeCustomApiCallOperations.call(this, i, operation);
 						break;
 					default:
 						throw new NodeOperationError(

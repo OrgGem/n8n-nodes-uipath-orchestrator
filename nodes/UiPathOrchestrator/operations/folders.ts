@@ -81,16 +81,16 @@ export async function executeFoldersOperations(
 		);
 	} else if (operation === 'delete') {
 		const key = this.getNodeParameter('key', i) as string;
-		responseData = await uiPathApiRequest.call(this, 'DELETE', `/odata/Folders(key='${key}')`);
+		responseData = await uiPathApiRequest.call(this, 'DELETE', `/odata/Folders(key='${encodeURIComponent(key)}')`);
 	} else if (operation === 'get') {
 		const key = this.getNodeParameter('key', i) as string;
 		const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
-		let query = `/odata/Folders/UiPath.Server.Configuration.OData.GetByKey(identifier='${key}')`;
+		let query = `/odata/Folders/UiPath.Server.Configuration.OData.GetByKey(identifier='${encodeURIComponent(key)}')`;
 		const queryParams = [];
-		if (additionalFields.expand) queryParams.push(`$expand=${additionalFields.expand}`);
-		if (additionalFields.filter) queryParams.push(`$filter=${additionalFields.filter}`);
-		if (additionalFields.select) queryParams.push(`$select=${additionalFields.select}`);
-		if (additionalFields.orderby) queryParams.push(`$orderby=${additionalFields.orderby}`);
+		if (additionalFields.expand) queryParams.push(`$expand=${encodeURIComponent(additionalFields.expand as string)}`);
+		if (additionalFields.filter) queryParams.push(`$filter=${encodeURIComponent(additionalFields.filter as string)}`);
+		if (additionalFields.select) queryParams.push(`$select=${encodeURIComponent(additionalFields.select as string)}`);
+		if (additionalFields.orderby) queryParams.push(`$orderby=${encodeURIComponent(additionalFields.orderby as string)}`);
 		if (queryParams.length > 0) query += '?' + queryParams.join('&');
 		responseData = await uiPathApiRequest.call(this, 'GET', query);
 	} else if (operation === 'getAll') {
@@ -107,16 +107,16 @@ export async function executeFoldersOperations(
 		const take = this.getNodeParameter('take', i) as number;
 		const skip = this.getNodeParameter('skip', i) as number;
 		const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
-		let query = `/odata/Folders/UiPath.Server.Configuration.OData.GetAllRolesForUser(username='${username}',skip=${skip},take=${take})`;
+		let query = `/odata/Folders/UiPath.Server.Configuration.OData.GetAllRolesForUser(username='${encodeURIComponent(username)}',skip=${skip},take=${take})`;
 		const queryParams = [];
-		if (additionalFields.type) queryParams.push(`type=${additionalFields.type}`);
-		if (additionalFields.searchText) queryParams.push(`searchText=${additionalFields.searchText}`);
+		if (additionalFields.type) queryParams.push(`type=${encodeURIComponent(additionalFields.type as string)}`);
+		if (additionalFields.searchText) queryParams.push(`searchText=${encodeURIComponent(additionalFields.searchText as string)}`);
 		if (queryParams.length > 0) query += '?' + queryParams.join('&');
 		responseData = await uiPathApiRequest.call(this, 'GET', query);
 	} else if (operation === 'getMachinesForFolder') {
 		const key = this.getNodeParameter('key', i) as string;
 		const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
-		let query = `/odata/Folders/UiPath.Server.Configuration.OData.GetMachinesForFolder(key='${key}')`;
+		let query = `/odata/Folders/UiPath.Server.Configuration.OData.GetMachinesForFolder(key='${encodeURIComponent(key)}')`;
 		const queryParams = [];
 		if (additionalFields.top) queryParams.push(`$top=${additionalFields.top}`);
 		if (additionalFields.skip) queryParams.push(`$skip=${additionalFields.skip}`);
@@ -143,7 +143,7 @@ export async function executeFoldersOperations(
 		const key = this.getNodeParameter('key', i) as string;
 		const includeInherited = this.getNodeParameter('includeInherited', i) as boolean;
 		const additionalFields = this.getNodeParameter('additionalFields', i) as IDataObject;
-		let query = `/odata/Folders/UiPath.Server.Configuration.OData.GetUsersForFolder(key='${key}',includeInherited=${includeInherited})`;
+		let query = `/odata/Folders/UiPath.Server.Configuration.OData.GetUsersForFolder(key='${encodeURIComponent(key)}',includeInherited=${includeInherited})`;
 		const queryParams = [];
 		if (additionalFields.includeAlertsEnabled)
 			queryParams.push(`includeAlertsEnabled=${additionalFields.includeAlertsEnabled}`);

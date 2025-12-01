@@ -37,16 +37,16 @@ export async function executeAssetsOperations(
 		const assetId = this.getNodeParameter('assetIdForFolders', i) as string;
 		const expand = this.getNodeParameter('expandAssetFolders', i) as string;
 		const select = this.getNodeParameter('selectAssetFolders', i) as string;
-		let url = `/odata/Assets/UiPath.Server.Configuration.OData.GetFoldersForAsset(id=${assetId})`;
-		const queryParams = [];
-		if (expand) queryParams.push(`$expand=${expand}`);
-		if (select) queryParams.push(`$select=${select}`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+
+		const qs: any = {};
+		if (expand) qs.$expand = expand;
+		if (select) qs.$select = select;
+
+		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/Assets/UiPath.Server.Configuration.OData.GetFoldersForAsset(id=${encodeURIComponent(assetId)})`, {}, qs);
 	} else if (operation === 'getRobotAsset') {
 		const robotKey = this.getNodeParameter('robotKey', i) as string;
 		const name = this.getNodeParameter('assetName', i) as string;
-		let url = `/odata/Assets/UiPath.Server.Configuration.OData.GetRobotAsset(robotId='${robotKey}',assetName='${name}')`;
+		let url = `/odata/Assets/UiPath.Server.Configuration.OData.GetRobotAsset(robotId='${encodeURIComponent(robotKey)}',assetName='${encodeURIComponent(name)}')`;
 		responseData = await uiPathApiRequest.call(this, 'GET', url);
 	} else if (operation === 'getRobotAssetByNameForRobotKey') {
 		const bodyStr = this.getNodeParameter('bodyJson', i) as string;
@@ -65,7 +65,7 @@ export async function executeAssetsOperations(
 	} else if (operation === 'getRobotAssetByRobotId') {
 		const robotId = this.getNodeParameter('robotNumericId', i) as number;
 		const name = this.getNodeParameter('assetName', i) as string;
-		let url = `/odata/Assets/UiPath.Server.Configuration.OData.GetRobotAssetByRobotId(robotId=${robotId},assetName='${name}')`;
+		let url = `/odata/Assets/UiPath.Server.Configuration.OData.GetRobotAssetByRobotId(robotId=${encodeURIComponent(robotId.toString())},assetName='${encodeURIComponent(name)}')`;
 		responseData = await uiPathApiRequest.call(this, 'GET', url);
 	} else if (operation === 'setRobotAssetByRobotKey') {
 		const bodyStr = this.getNodeParameter('bodyJson', i) as string;
@@ -106,12 +106,12 @@ export async function executeAssetsOperations(
 	} else if (operation === 'getAll') {
 		const top = this.getNodeParameter('take', i) as number;
 		const skip = this.getNodeParameter('skip', i) as number;
-		let url = '/odata/Assets';
-		const queryParams: string[] = [];
-		if (top && top > 0) queryParams.push(`$top=${Math.min(top, 1000)}`);
-		if (skip && skip > 0) queryParams.push(`$skip=${skip}`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+
+		const qs: any = {};
+		if (top && top > 0) qs.$top = Math.min(top, 1000);
+		if (skip && skip > 0) qs.$skip = skip;
+
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Assets', {}, qs);
 		responseData = responseData.value || responseData;
 	}
 
@@ -124,21 +124,20 @@ export async function executeAssetsOperations(
 		const top = this.getNodeParameter('top', i) as number;
 		const skip = this.getNodeParameter('skipFiltered', i) as number;
 		const count = this.getNodeParameter('count', i) as boolean;
-		let url = '/odata/Assets/UiPath.Server.Configuration.OData.GetFiltered';
-		const queryParams: string[] = [];
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (select) queryParams.push(`$select=${select}`);
-		if (top && top > 0) queryParams.push(`$top=${Math.min(top, 1000)}`);
+
+		const qs: any = {};
+		if (filter) qs.$filter = filter;
+		if (select) qs.$select = select;
+		if (top && top > 0) qs.$top = Math.min(top, 1000);
 		if (expand) {
-			// Fix: Validate actual nesting depth, not comma count
 			validateExpandDepth(expand, 2);
-			queryParams.push(`$expand=${expand}`);
+			qs.$expand = expand;
 		}
-		if (orderby) queryParams.push(`$orderby=${orderby}`);
-		if (skip && skip > 0) queryParams.push(`$skip=${skip}`);
-		if (count) queryParams.push(`$count=true`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		if (orderby) qs.$orderby = orderby;
+		if (skip && skip > 0) qs.$skip = skip;
+		if (count) qs.$count = true;
+
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Assets/UiPath.Server.Configuration.OData.GetFiltered', {}, qs);
 		responseData = responseData.value || responseData;
 	}
 
@@ -154,24 +153,21 @@ export async function executeAssetsOperations(
 		const count = this.getNodeParameter('count', i) as boolean;
 		const organizationUnitId = this.getNodeParameter('organizationUnitId', i) as number;
 
-		let url = '/odata/Assets/UiPath.Server.Configuration.OData.GetAssetsAcrossFolders';
-		const queryParams: string[] = [];
-		if (excludeFolderId) queryParams.push(`excludeFolderId=${encodeURIComponent(excludeFolderId)}`);
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (select) queryParams.push(`$select=${select}`);
+		const qs: any = {};
+		if (excludeFolderId) qs.excludeFolderId = excludeFolderId;
+		if (filter) qs.$filter = filter;
+		if (select) qs.$select = select;
 		if (expand) {
-			// Fix: Validate actual nesting depth, not comma count
 			validateExpandDepth(expand, 2);
-			queryParams.push(`$expand=${expand}`);
+			qs.$expand = expand;
 		}
-		if (orderby) queryParams.push(`$orderby=${orderby}`);
-		if (top && top > 0) queryParams.push(`$top=${Math.min(top, 1000)}`);
-		if (skip && skip > 0) queryParams.push(`$skip=${skip}`);
-		if (count) queryParams.push(`$count=true`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
+		if (orderby) qs.$orderby = orderby;
+		if (top && top > 0) qs.$top = Math.min(top, 1000);
+		if (skip && skip > 0) qs.$skip = skip;
+		if (count) qs.$count = true;
+
 		const headers = organizationUnitId ? { 'X-UIPATH-OrganizationUnitId': organizationUnitId.toString() } : {};
-		// Fix: Correct parameter order (method, endpoint, body, qs, headers)
-		responseData = await uiPathApiRequest.call(this, 'GET', url, {}, {}, headers);
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Assets/UiPath.Server.Configuration.OData.GetAssetsAcrossFolders', {}, qs, headers);
 		responseData = responseData.value || responseData;
 	}
 
@@ -223,12 +219,12 @@ export async function executeAssetsOperations(
 
 		const expand = this.getNodeParameter('expandAssetFolders', i) as string;
 		const select = this.getNodeParameter('selectAssetFolders', i) as string;
-		let url = `/odata/Assets(${assetId})`;
-		const queryParams: string[] = [];
-		if (expand) queryParams.push(`$expand=${expand}`);
-		if (select) queryParams.push(`$select=${select}`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+
+		const qs: any = {};
+		if (expand) qs.$expand = expand;
+		if (select) qs.$select = select;
+
+		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/Assets(${assetId})`, {}, qs);
 	}
 
 	// Update Asset

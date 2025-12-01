@@ -18,25 +18,21 @@ export async function executeRobotLogsOperations(
 		const count = this.getNodeParameter('count', i, false) as boolean;
 		const organizationUnitId = this.getNodeParameter('organizationUnitId', i, '') as string;
 
-		let url = `/odata/RobotLogs`;
-		const queryParams = [];
-
-		if (top) queryParams.push(`$top=${Math.min(top, 1000)}`);
-		if (skip) queryParams.push(`$skip=${skip}`);
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (select) queryParams.push(`$select=${select}`);
-		if (orderBy) queryParams.push(`$orderby=${orderBy}`);
-		if (count) queryParams.push(`$count=true`);
-		if (expand) queryParams.push(`$expand=${expand}`);
-
-		if (queryParams.length > 0) url += '?' + queryParams.join('&');
+		const qs: any = {};
+		if (top) qs.$top = Math.min(top, 1000);
+		if (skip) qs.$skip = skip;
+		if (filter) qs.$filter = filter;
+		if (select) qs.$select = select;
+		if (orderBy) qs.$orderby = orderBy;
+		if (count) qs.$count = true;
+		if (expand) qs.$expand = expand;
 
 		const headers: { [key: string]: string } = {};
 		if (organizationUnitId) {
 			headers['X-UIPATH-OrganizationUnitId'] = organizationUnitId;
 		}
 
-		responseData = await uiPathApiRequest.call(this, 'GET', url, {}, {}, headers);
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/RobotLogs', {}, qs, headers);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'export') {
 		const filter = this.getNodeParameter('filter', i, '') as string;
@@ -45,41 +41,33 @@ export async function executeRobotLogsOperations(
 		const topExport = this.getNodeParameter('topExport', i, 1000) as number;
 		const organizationUnitId = this.getNodeParameter('organizationUnitId', i, '') as string;
 
-		let url = `/odata/RobotLogs/UiPath.Server.Configuration.OData.Export`;
-		const queryParams = [];
-
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (selectExport) queryParams.push(`$select=${selectExport}`);
-		if (orderByExport) queryParams.push(`$orderby=${orderByExport}`);
-		if (topExport) queryParams.push(`$top=${Math.min(topExport, 1000)}`);
-
-		if (queryParams.length > 0) url += '?' + queryParams.join('&');
+		const qs: any = {};
+		if (filter) qs.$filter = filter;
+		if (selectExport) qs.$select = selectExport;
+		if (orderByExport) qs.$orderby = orderByExport;
+		if (topExport) qs.$top = Math.min(topExport, 1000);
 
 		const headers: { [key: string]: string } = {};
 		if (organizationUnitId) {
 			headers['X-UIPATH-OrganizationUnitId'] = organizationUnitId;
 		}
 
-		responseData = await uiPathApiRequest.call(this, 'POST', url, {}, {}, headers);
+		responseData = await uiPathApiRequest.call(this, 'POST', '/odata/RobotLogs/UiPath.Server.Configuration.OData.Export', {}, qs, headers);
 	} else if (operation === 'getTotalCount') {
 		const filter = this.getNodeParameter('filter', i, '') as string;
 		const expandCount = this.getNodeParameter('expandCount', i, '') as string;
 		const organizationUnitId = this.getNodeParameter('organizationUnitId', i, '') as string;
 
-		let url = `/odata/RobotLogs/UiPath.Server.Configuration.OData.GetTotalCount`;
-		const queryParams = [];
-
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (expandCount) queryParams.push(`$expand=${expandCount}`);
-
-		if (queryParams.length > 0) url += '?' + queryParams.join('&');
+		const qs: any = {};
+		if (filter) qs.$filter = filter;
+		if (expandCount) qs.$expand = expandCount;
 
 		const headers: { [key: string]: string } = {};
 		if (organizationUnitId) {
 			headers['X-UIPATH-OrganizationUnitId'] = organizationUnitId;
 		}
 
-		responseData = await uiPathApiRequest.call(this, 'GET', url, {}, {}, headers);
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/RobotLogs/UiPath.Server.Configuration.OData.GetTotalCount', {}, qs, headers);
 		// Extract value from OData response
 		responseData = responseData.value !== undefined ? { count: responseData.value } : responseData;
 	} else if (operation === 'reports') {
@@ -90,16 +78,12 @@ export async function executeRobotLogsOperations(
 		const topReport = this.getNodeParameter('topReport', i, 1000) as number;
 		const organizationUnitId = this.getNodeParameter('organizationUnitId', i, '') as string;
 
-		let url = `/odata/RobotLogs/UiPath.Server.Configuration.OData.Reports`;
-		const queryParams = [];
-
-		if (fileNameSubject) queryParams.push(`fileNameSubject=${fileNameSubject}`);
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (selectReport) queryParams.push(`$select=${selectReport}`);
-		if (orderByReport) queryParams.push(`$orderby=${orderByReport}`);
-		if (topReport) queryParams.push(`$top=${Math.min(topReport, 1000)}`);
-
-		if (queryParams.length > 0) url += '?' + queryParams.join('&');
+		const qs: any = {};
+		if (fileNameSubject) qs.fileNameSubject = fileNameSubject;
+		if (filter) qs.$filter = filter;
+		if (selectReport) qs.$select = selectReport;
+		if (orderByReport) qs.$orderby = orderByReport;
+		if (topReport) qs.$top = Math.min(topReport, 1000);
 
 		const headers: { [key: string]: string } = {};
 		if (organizationUnitId) {
@@ -107,7 +91,7 @@ export async function executeRobotLogsOperations(
 		}
 
 		// This returns binary file data
-		responseData = await uiPathApiRequest.call(this, 'GET', url, {}, {}, headers);
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/RobotLogs/UiPath.Server.Configuration.OData.Reports', {}, qs, headers);
 	}
 
 	return responseData;

@@ -18,18 +18,16 @@ export async function executeRobotsOperations(
 		const count = this.getNodeParameter('count', i) as boolean;
 		const expand = this.getNodeParameter('expand', i) as string;
 
-		let url = `/odata/Robots`;
-		const queryParams = [];
-		if (top) queryParams.push(`$top=${Math.min(top, 1000)}`);
-		if (skip) queryParams.push(`$skip=${skip}`);
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (select) queryParams.push(`$select=${encodeURIComponent(select)}`);
-		if (orderBy) queryParams.push(`$orderby=${encodeURIComponent(orderBy)}`);
-		if (count) queryParams.push(`$count=true`);
-		if (expand) queryParams.push(`$expand=${encodeURIComponent(expand)}`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
+		const qs: any = {};
+		if (top) qs.$top = Math.min(top, 1000);
+		if (skip) qs.$skip = skip;
+		if (filter) qs.$filter = filter;
+		if (select) qs.$select = select;
+		if (orderBy) qs.$orderby = orderBy;
+		if (count) qs.$count = true;
+		if (expand) qs.$expand = expand;
 
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Robots', {}, qs);
 		responseData = responseData.value;
 	} else if (operation === 'get') {
 		const robotId = this.getNodeParameter('robotId', i) as string;
@@ -142,36 +140,32 @@ export async function executeRobotsOperations(
 		const filter = this.getNodeParameter('filter', i) as string;
 		const top = this.getNodeParameter('top', i) as number;
 
-		let url = `/odata/Robots/UiPath.Server.Configuration.OData.FindAllAcrossFolders`;
-		const queryParams = [];
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (top) queryParams.push(`$top=${Math.min(top, 1000)}`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
+		const qs: any = {};
+		if (filter) qs.$filter = filter;
+		if (top) qs.$top = Math.min(top, 1000);
 
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Robots/UiPath.Server.Configuration.OData.FindAllAcrossFolders', {}, qs);
 		responseData = responseData.value;
 	} else if (operation === 'getConfiguredRobots') {
 		const filter = this.getNodeParameter('filter', i) as string;
 		const top = this.getNodeParameter('top', i) as number;
 
-		let url = `/odata/Robots/UiPath.Server.Configuration.OData.GetConfiguredRobots`;
-		const queryParams = [];
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (top) queryParams.push(`$top=${Math.min(top, 1000)}`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
+		const qs: any = {};
+		if (filter) qs.$filter = filter;
+		if (top) qs.$top = Math.min(top, 1000);
 
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Robots/UiPath.Server.Configuration.OData.GetConfiguredRobots', {}, qs);
 		responseData = responseData.value;
 	} else if (operation === 'getFolderRobots') {
 		const folderId = this.getNodeParameter('folderId', i) as string;
 		const machineId = this.getNodeParameter('machineId', i, '') as string;
 
-		// Fix: GET requests should not have body, use query parameters instead
-		let url = `/odata/Robots/UiPath.Server.Configuration.OData.GetFolderRobots`;
-		const queryParams: string[] = [];
-		queryParams.push(`folderId=${folderId}`);
-		if (machineId) queryParams.push(`machineId=${machineId}`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
+		// Fix: Use OData function parameter syntax, not query string
+		let url = `/odata/Robots/UiPath.Server.Configuration.OData.GetFolderRobots(folderId=${folderId}`;
+		if (machineId) {
+			url += `,machineId=${machineId}`;
+		}
+		url += ')';
 
 		responseData = await uiPathApiRequest.call(this, 'GET', url);
 		responseData = responseData.value || responseData;
@@ -186,7 +180,7 @@ export async function executeRobotsOperations(
 		const processId = this.getNodeParameter('processId', i) as string;
 		const filter = this.getNodeParameter('filter', i) as string;
 
-		let url = `/odata/Robots/UiPath.Server.Configuration.OData.GetRobotsForProcess(processId='${processId}')`;
+		let url = `/odata/Robots/UiPath.Server.Configuration.OData.GetRobotsForProcess(processId='${encodeURIComponent(processId)}')`;
 		if (filter) url += `?$filter=${encodeURIComponent(filter)}`;
 
 		responseData = await uiPathApiRequest.call(this, 'GET', url);
@@ -195,7 +189,7 @@ export async function executeRobotsOperations(
 		const folderId = this.getNodeParameter('folderId', i) as string;
 		const filter = this.getNodeParameter('filter', i) as string;
 
-		let url = `/odata/Robots/UiPath.Server.Configuration.OData.GetRobotsFromFolder(folderId=${folderId})`;
+		let url = `/odata/Robots/UiPath.Server.Configuration.OData.GetRobotsFromFolder(folderId=${encodeURIComponent(folderId)})`;
 		if (filter) url += `?$filter=${encodeURIComponent(filter)}`;
 
 		responseData = await uiPathApiRequest.call(this, 'GET', url);
@@ -210,7 +204,7 @@ export async function executeRobotsOperations(
 		responseData = responseData.value;
 	} else if (operation === 'toggleEnabledStatus') {
 		const robotIdsStr = this.getNodeParameter('robotIds', i) as string;
-		const enabled = this.getNodeParameter('enabled', i) as boolean;
+		const disabled = this.getNodeParameter('disabled', i) as boolean;
 
 		let robotIds: string[] = [];
 		try {
@@ -224,7 +218,7 @@ export async function executeRobotsOperations(
 
 		const body: IDataObject = {
 			robotIds,
-			enabled,
+			disabled,
 		};
 
 		responseData = await uiPathApiRequest.call(

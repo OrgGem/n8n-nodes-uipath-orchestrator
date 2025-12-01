@@ -18,19 +18,16 @@ export async function executeSessionsOperations(
 		const count = this.getNodeParameter('count', i) as boolean;
 		const expand = this.getNodeParameter('expand', i) as string;
 
-		let url = `/odata/Sessions`;
-		const queryParams = [];
-		if (top) queryParams.push(`$top=${Math.min(top, 1000)}`);
-		if (skip) queryParams.push(`$skip=${skip}`);
-		if (filter) queryParams.push(`$filter=${filter}`);
-		if (select) queryParams.push(`$select=${select}`);
-		if (orderBy) queryParams.push(`$orderby=${orderBy}`);
-		if (count) queryParams.push(`$count=true`);
-		if (expand) queryParams.push(`$expand=${expand}`);
-		if (queryParams.length > 0) url += '?' + queryParams.join('&');
+		const qs: any = {};
+		if (top) qs.$top = Math.min(top, 1000);
+		if (skip) qs.$skip = skip;
+		if (filter) qs.$filter = filter;
+		if (select) qs.$select = select;
+		if (orderBy) qs.$orderby = orderBy;
+		if (count) qs.$count = true;
+		if (expand) qs.$expand = expand;
 
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
-		// Fix: Add OData response unwrapping
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Sessions', {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'toggleDebugMode') {
 		const sessionId = this.getNodeParameter('sessionId', i) as string;
@@ -74,74 +71,59 @@ export async function executeSessionsOperations(
 		const orderBy = this.getNodeParameter('orderBy', i) as string;
 		const count = this.getNodeParameter('count', i) as boolean;
 
-		let url = `/odata/Sessions/UiPath.Server.Configuration.OData.GetGlobalSessions`;
-		const queryParams = [];
-		if (top) queryParams.push(`$top=${Math.min(top, 1000)}`);
-		if (skip) queryParams.push(`$skip=${skip}`);
-		if (filter) queryParams.push(`$filter=${filter}`);
-		if (select) queryParams.push(`$select=${select}`);
-		if (orderBy) queryParams.push(`$orderby=${orderBy}`);
-		if (count) queryParams.push(`$count=true`);
-		if (queryParams.length > 0) url += '?' + queryParams.join('&');
+		const qs: any = {};
+		if (top) qs.$top = Math.min(top, 1000);
+		if (skip) qs.$skip = skip;
+		if (filter) qs.$filter = filter;
+		if (select) qs.$select = select;
+		if (orderBy) qs.$orderby = orderBy;
+		if (count) qs.$count = true;
 
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
-		// Fix: Add OData response unwrapping
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Sessions/UiPath.Server.Configuration.OData.GetGlobalSessions', {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'getMachineSessionRuntimes') {
 		const runtimeType = this.getNodeParameter('runtimeType', i) as string;
 		const filter = this.getNodeParameter('filter', i) as string;
 		const top = this.getNodeParameter('top', i) as number;
 
-		let url = `/odata/Sessions/UiPath.Server.Configuration.OData.GetMachineSessionRuntimes`;
-		const queryParams = [];
-		if (runtimeType) queryParams.push(`runtimeType=${runtimeType}`);
-		if (filter) queryParams.push(`$filter=${filter}`);
-		if (top) queryParams.push(`$top=${Math.min(top, 1000)}`);
-		if (queryParams.length > 0) url += '?' + queryParams.join('&');
+		const qs: any = {};
+		if (runtimeType) qs.runtimeType = runtimeType;
+		if (filter) qs.$filter = filter;
+		if (top) qs.$top = Math.min(top, 1000);
 
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
-		// Fix: Add OData response unwrapping
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Sessions/UiPath.Server.Configuration.OData.GetMachineSessionRuntimes', {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'getMachineSessionRuntimesByFolderId') {
 		const folderId = this.getNodeParameter('folderId', i) as string;
 		const robotId = this.getNodeParameter('robotId', i) as string;
 		const runtimeType = this.getNodeParameter('runtimeType', i) as string;
 
-		let url = `/odata/Sessions/UiPath.Server.Configuration.OData.GetMachineSessionRuntimesByFolderId(folderId=${folderId})`;
-		const queryParams = [];
-		if (robotId) queryParams.push(`robotId=${robotId}`);
-		if (runtimeType) queryParams.push(`runtimeType=${runtimeType}`);
-		if (queryParams.length > 0) url += '?' + queryParams.join('&');
+		const qs: any = {};
+		if (robotId) qs.robotId = robotId;
+		if (runtimeType) qs.runtimeType = runtimeType;
 
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
-		// Fix: Add OData response unwrapping
+		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/Sessions/UiPath.Server.Configuration.OData.GetMachineSessionRuntimesByFolderId(folderId=${encodeURIComponent(folderId)})`, {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'getMachineSessions') {
 		const machineId = this.getNodeParameter('machineId', i) as string;
 		const filter = this.getNodeParameter('filter', i) as string;
 		const top = this.getNodeParameter('top', i) as number;
 
-		let url = `/odata/Sessions/UiPath.Server.Configuration.OData.GetMachineSessions(key=${machineId})`;
-		const queryParams = [];
-		if (filter) queryParams.push(`$filter=${filter}`);
-		if (top) queryParams.push(`$top=${Math.min(top, 1000)}`);
-		if (queryParams.length > 0) url += '?' + queryParams.join('&');
+		const qs: any = {};
+		if (filter) qs.$filter = filter;
+		if (top) qs.$top = Math.min(top, 1000);
 
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
-		// Fix: Add OData response unwrapping
+		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/Sessions/UiPath.Server.Configuration.OData.GetMachineSessions(key=${encodeURIComponent(machineId)})`, {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'getUsernames') {
 		const filter = this.getNodeParameter('filter', i) as string;
 		const top = this.getNodeParameter('top', i) as number;
 
-		let url = `/odata/Sessions/UiPath.Server.Configuration.OData.GetUsernames`;
-		const queryParams = [];
-		if (filter) queryParams.push(`$filter=${filter}`);
-		if (top) queryParams.push(`$top=${Math.min(top, 1000)}`);
-		if (queryParams.length > 0) url += '?' + queryParams.join('&');
+		const qs: any = {};
+		if (filter) qs.$filter = filter;
+		if (top) qs.$top = Math.min(top, 1000);
 
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
-		// Fix: Add OData response unwrapping
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Sessions/UiPath.Server.Configuration.OData.GetUsernames', {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'setMaintenanceMode') {
 		const hostName = this.getNodeParameter('hostName', i) as string;

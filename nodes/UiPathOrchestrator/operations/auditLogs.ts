@@ -19,47 +19,37 @@ export async function executeAuditLogsOperations(
 		const expand = this.getNodeParameter('expand', i) as string;
 		const count = this.getNodeParameter('count', i) as boolean;
 
-		let url = `/odata/AuditLogs`;
-		const queryParams = [];
-
-		if (top) queryParams.push(`$top=${Math.min(top, 1000)}`);
-		if (skip) queryParams.push(`$skip=${skip}`);
-		if (filter) queryParams.push(`$filter=${filter}`);
-		if (select) queryParams.push(`$select=${select}`);
-		if (orderBy) queryParams.push(`$orderby=${orderBy}`);
-		if (count) queryParams.push(`$count=true`);
-		if (expand) queryParams.push(`$expand=${expand}`);
-
-		if (queryParams.length > 0) url += '?' + queryParams.join('&');
+		const qs: any = {};
+		if (top) qs.$top = Math.min(top, 1000);
+		if (skip) qs.$skip = skip;
+		if (filter) qs.$filter = filter;
+		if (select) qs.$select = select;
+		if (orderBy) qs.$orderby = orderBy;
+		if (count) qs.$count = true;
+		if (expand) qs.$expand = expand;
 
 		const headers: { [key: string]: string } = {};
 		if (auditedService) {
 			headers['x-UIPATH-AuditedService'] = auditedService;
 		}
 
-		// Fix: Correct parameter order (method, endpoint, body, qs, headers)
-		responseData = await uiPathApiRequest.call(this, 'GET', url, {}, {}, headers);
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/AuditLogs', {}, qs, headers);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'export') {
 		const auditedService = this.getNodeParameter('auditedService', i) as string;
 		const filter = this.getNodeParameter('filter', i) as string;
 		const exportName = this.getNodeParameter('exportName', i) as string;
 
-		let url = `/odata/AuditLogs/UiPath.Server.Configuration.OData.Export`;
-		const queryParams = [];
-
-		if (filter) queryParams.push(`$filter=${filter}`);
-		if (exportName) queryParams.push(`exportName=${exportName}`);
-
-		if (queryParams.length > 0) url += '?' + queryParams.join('&');
+		const qs: any = {};
+		if (filter) qs.$filter = filter;
+		if (exportName) qs.exportName = exportName;
 
 		const headers: { [key: string]: string } = {};
 		if (auditedService) {
 			headers['x-UIPATH-AuditedService'] = auditedService;
 		}
 
-		// Fix: Correct parameter order (method, endpoint, body, qs, headers)
-		responseData = await uiPathApiRequest.call(this, 'POST', url, {}, {}, headers);
+		responseData = await uiPathApiRequest.call(this, 'POST', '/odata/AuditLogs/UiPath.Server.Configuration.OData.Export', {}, qs, headers);
 	} else if (operation === 'getDetails') {
 		const auditedService = this.getNodeParameter('auditedService', i) as string;
 		const auditLogId = this.getNodeParameter('auditLogId', i) as string;
@@ -71,7 +61,7 @@ export async function executeAuditLogsOperations(
 			);
 		}
 
-		let url = `/odata/AuditLogs/UiPath.Server.Configuration.OData.GetAuditLogDetails(auditLogId=${auditLogId})`;
+		let url = `/odata/AuditLogs/UiPath.Server.Configuration.OData.GetAuditLogDetails(auditLogId=${encodeURIComponent(auditLogId)})`;
 
 		const headers: { [key: string]: string } = {};
 		if (auditedService) {

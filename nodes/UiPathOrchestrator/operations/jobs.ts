@@ -157,18 +157,19 @@ export async function executeJobsOperations(
 		const expand = this.getNodeParameter('$expand', i) as string;
 		const select = this.getNodeParameter('$select', i) as string;
 
-		let query = '/odata/Jobs/UiPath.Server.Configuration.OData.Export?';
-		const params: string[] = [];
-		if (filter) params.push(`$filter=${encodeURIComponent(filter)}`);
-		if (orderby) params.push(`$orderby=${encodeURIComponent(orderby)}`);
-		if (expand) params.push(`$expand=${encodeURIComponent(expand)}`);
-		if (select) params.push(`$select=${encodeURIComponent(select)}`);
+		const qs: IDataObject = {};
+		if (filter) qs.$filter = filter;
+		if (orderby) qs.$orderby = orderby;
+		if (expand) qs.$expand = expand;
+		if (select) qs.$select = select;
 
-		if (params.length > 0) {
-			query += params.join('&');
-		}
-
-		responseData = await uiPathApiRequest.call(this, 'POST', query);
+		responseData = await uiPathApiRequest.call(
+			this,
+			'POST',
+			'/odata/Jobs/UiPath.Server.Configuration.OData.Export',
+			{},
+			qs,
+		);
 	} else if (operation === 'validateJob') {
 		const releaseKey = this.getNodeParameter('releaseKey', i) as string;
 		const inputArgumentsStr = this.getNodeParameter('inputArguments', i) as string;
@@ -213,8 +214,9 @@ export async function executeJobsOperations(
 		const jobId = this.getNodeParameter('jobId', i) as number;
 		const stopStrategy = this.getNodeParameter('stopStrategy', i) as string;
 
-		// Fix: Don't include jobId in body since it's in the URL
+		// Fix: Include both jobId and strategy in body per API specification
 		const body = {
+			jobId: jobId,
 			strategy: stopStrategy,
 		};
 

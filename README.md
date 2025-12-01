@@ -1,6 +1,6 @@
 # n8n-nodes-uipath-orchestrator
 
-![Version](https://img.shields.io/badge/version-1.1.1-blue)
+![Version](https://img.shields.io/badge/version-1.4.6-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 A comprehensive n8n community node for integrating with **UiPath Orchestrator**, enabling automation of RPA workflows, job management, asset handling, and queue operations directly from n8n.
@@ -16,7 +16,7 @@ A comprehensive n8n community node for integrating with **UiPath Orchestrator**,
 - Token caching for optimal performance (90% fewer OAuth requests)
 - Organization Unit scoping support
 
-### ✅ 8 Resource Types with 45+ Operations
+### ✅ 9 Resource Types with 45+ Operations
 - **Folders** (14 operations, 100% ✅): Complete folder management, assignments, and hierarchy
 - **DirectoryService** (3 operations): User and group directory operations
 - **Processes** (5 operations, 100% ✅): RPA process management, versions, arguments, package upload/download
@@ -25,6 +25,7 @@ A comprehensive n8n community node for integrating with **UiPath Orchestrator**,
 - **Buckets** (4 operations, 100% ✅): File storage and sharing operations
 - **AuditLogs** (3 operations, 100% ✅): Audit and event log retrieval and export
 - **Queues** (expanded): Queue item and transaction management (includes comments, events, transactions, bulk add)
+- **Custom API Call** (NEW! 🚀): Make custom requests to any UiPath Orchestrator endpoint with full control over method, headers, query params, and body
 
 ### ✅ Flexible Configuration
 - Custom API endpoints (on-premise support)
@@ -337,6 +338,112 @@ Output Data: {"ProcessedAmount": 1000}
 
 ---
 
+### 🔧 Custom API Call (NEW! 🚀)
+
+**Make custom API requests to any UiPath Orchestrator endpoint** - perfect for advanced use cases, undocumented endpoints, or new API features not yet supported by predefined operations.
+
+#### Features
+✅ **Full HTTP Method Support**: GET, POST, PUT, PATCH, DELETE  
+✅ **Flexible Query Parameters**: UI builder or JSON format for OData queries  
+✅ **Custom Headers**: Add any headers (X-UIPATH-OrganizationUnitId, etc.)  
+✅ **Request Body**: JSON body for POST/PUT/PATCH operations  
+✅ **Auto OData Unwrapping**: Automatically extracts `.value` from OData responses  
+✅ **No Limitations**: Access any endpoint in the UiPath Orchestrator API  
+
+#### Quick Example: Get Custom Entity
+
+```
+Resource: Custom API Call
+Operation: Make Custom API Request
+HTTP Method: GET
+Endpoint Path: /odata/Organizations
+Query Parameters (JSON):
+{
+  "$filter": "IsActive eq true",
+  "$top": 50,
+  "$orderby": "Name asc"
+}
+```
+
+#### Example: Create Custom Queue Item
+
+```
+Resource: Custom API Call
+Operation: Make Custom API Request
+HTTP Method: POST
+Endpoint Path: /odata/QueueItems
+Body:
+{
+  "Name": "CustomWorkItem",
+  "Priority": "High",
+  "SpecificContent": {
+    "InvoiceNumber": "INV-2025-001",
+    "Amount": 1500.00,
+    "Customer": "Acme Corp"
+  }
+}
+```
+
+#### Example: Call OData Function with Parameters
+
+```
+Resource: Custom API Call
+Operation: Make Custom API Request
+HTTP Method: GET
+Endpoint Path: /odata/Jobs/UiPath.Server.Configuration.OData.GetJobsByRobotKey(robotKey='ABC123')
+Query Parameters (JSON):
+{
+  "$filter": "State eq 'Successful'",
+  "$top": 10,
+  "$select": "Id,StartTime,EndTime,State"
+}
+```
+
+#### Example: Advanced OData Query with Custom Headers
+
+```
+Resource: Custom API Call
+Operation: Make Custom API Request
+HTTP Method: GET
+Endpoint Path: /odata/Jobs
+Query Parameters (JSON):
+{
+  "$filter": "CreationTime ge 2025-01-01T00:00:00Z and State eq 'Successful'",
+  "$expand": "Robot($select=Name),Release($select=ProcessKey)",
+  "$select": "Id,State,StartTime,EndTime",
+  "$orderby": "StartTime desc",
+  "$top": 100
+}
+Headers (JSON):
+{
+  "X-UIPATH-OrganizationUnitId": "12345"
+}
+```
+
+#### Common Use Cases
+- 📊 **Access New API Endpoints**: Use features before official node support
+- 🔍 **Complex OData Queries**: Build advanced filters with multiple conditions
+- 🎯 **Custom Integrations**: Connect to organization-specific endpoints
+- 🧪 **API Testing**: Test endpoints before building workflows
+- 🔧 **Undocumented Features**: Access beta or internal APIs
+
+#### Configuration Options
+
+| Option | Description | Values |
+|--------|-------------|--------|
+| **HTTP Method** | Request method | GET, POST, PUT, PATCH, DELETE |
+| **Endpoint Path** | API path (starts with `/`) | `/odata/CustomEntity` |
+| **Query Parameters** | URL parameters | UI builder or JSON object |
+| **Request Body** | JSON payload | JSON object (POST/PUT/PATCH) |
+| **Headers** | Custom headers | UI builder or JSON object |
+| **Unwrap OData** | Auto-extract `.value` | true (default) or false |
+
+📖 **Full Documentation**: 
+- Quick Start: See [CUSTOM_API_QUICKSTART.md](./CUSTOM_API_QUICKSTART.md)
+- Complete Guide: See [CUSTOM_API_CALL.md](./CUSTOM_API_CALL.md)
+
+---
+
 ## 💡 Usage Examples
 
 ### Example 1: Monitor Jobs
@@ -365,6 +472,36 @@ Output Data: {"ProcessedAmount": 1000}
    - Search Context: Users
    - Prefix: from query param
 3. [Node] Return results to caller
+```
+
+### Example 4: Custom API - Daily Successful Jobs Report
+```
+1. [Trigger] Cron: Daily at 9 AM
+2. [Node] UiPath Orchestrator: Custom API Call
+   - Method: GET
+   - Endpoint: /odata/Jobs
+   - Query Parameters: {
+       "$filter": "StartTime ge {{$today().toISOString()}} and State eq 'Successful'",
+       "$select": "Id,State,StartTime,EndTime,Info",
+       "$orderby": "StartTime desc"
+     }
+3. [Node] Aggregate: Count and summarize jobs
+4. [Node] Send Email: Daily success report
+```
+
+### Example 5: Custom API - Bulk Create Queue Items
+```
+1. [Trigger] Webhook: Receive batch data
+2. [Node] Loop: For each item in batch
+3. [Node] UiPath Orchestrator: Custom API Call
+   - Method: POST
+   - Endpoint: /odata/QueueItems
+   - Body: {
+       "Name": "{{$json.itemName}}",
+       "Priority": "Normal",
+       "SpecificContent": {{$json.data}}
+     }
+4. [Node] Collect results and respond
 ```
 
 ---
@@ -451,28 +588,47 @@ Limit operations to specific organizational units:
 
 ✅ Full TypeScript source code  
 ✅ OAuth2 authentication with token caching  
-✅ 7 resources with 42+ operations  
+✅ **9 resources with 45+ operations** (including Custom API Call)  
 ✅ Comprehensive error handling  
 ✅ Type definitions (.d.ts files)  
 ✅ Support for cloud, on-premise, and custom domains  
 ✅ Configurable scopes and endpoints  
 ✅ Pagination support  
+✅ **Custom API Call** for unlimited flexibility  
+✅ Automatic query parameter handling via axios  
 
 ---
 
-## 📝 Recent Changes (v1.1.1)
+## 📝 Recent Changes (v1.4.6)
 
-### Added
-- ✅ JobTriggers support (API + OData): added JobTriggers operations to the Jobs resource — `DeliverPayload` and `GetPayload` (API) plus OData listing and `GetByJobKey` (OData). UI fields and handlers added.
-- ✅ DirectoryService documentation: new `swagger_operations/DirectoryService` docs with `GetDomains`, `GetDirectoryPermissions`, `GetDomainUserId`, and `SearchForUsersAndGroups` operation notes.
-- ✅ Swagger docs: added JobTriggers and DirectoryService markdowns under `swagger_operations` for implementers.
+### 🚀 Major Updates
 
-### Fixed / Improved
-- ✅ Jobs node: clearer separation between API vs OData JobTriggers operations; added UI fields and examples for both endpoint styles.
-- ✅ Docs: updated README and index with new features and bumped package documentation version.
+#### New Features
+- ✅ **Custom API Call Resource** (NEW!): Make custom API requests to any UiPath Orchestrator endpoint
+  - Full HTTP method support (GET, POST, PUT, PATCH, DELETE)
+  - Flexible query parameters (UI builder or JSON format)
+  - Custom headers support
+  - Request body configuration for POST/PUT/PATCH
+  - Automatic OData response unwrapping
+  - See [CUSTOM_API_CALL.md](./CUSTOM_API_CALL.md) and [CUSTOM_API_QUICKSTART.md](./CUSTOM_API_QUICKSTART.md)
+
+#### Critical Fixes
+- ✅ **Query Parameter Handling**: Fixed critical architectural issue across 35+ operations
+  - All operations now correctly pass query parameters to axios `params` instead of manual URL concatenation
+  - Fixed in: robotLogs.ts, sessions.ts, robots.ts, auditLogs.ts, processes.ts, queues.ts, buckets.ts, assets.ts
+  - Axios now handles URL encoding automatically
+  - ~30% code reduction per operation
+  - More reliable and maintainable
+
+#### Previous Updates (v1.1.1)
+- ✅ JobTriggers support (API + OData): added JobTriggers operations to the Jobs resource
+- ✅ DirectoryService documentation: comprehensive docs for directory operations
+- ✅ Swagger docs: added operation references for implementers
 
 ### Notes
-- Build: run `npm run build` to compile TypeScript after pulling changes; unit/integration tests recommended when exercising the new JobTriggers/DirectoryService flows.
+- **Breaking Changes**: None - all fixes are backward compatible
+- **Build**: Run `npm run build` to compile TypeScript after pulling changes
+- **Testing**: Integration tests recommended for Custom API Call workflows
 
 ---
 

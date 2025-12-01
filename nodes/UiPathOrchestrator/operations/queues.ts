@@ -139,21 +139,15 @@ export async function executeQueuesOperations(
 		const orderby = this.getNodeParameter('orderby', i) as string;
 		const count = this.getNodeParameter('count', i) as boolean;
 
-		let url = '/odata/QueueItems';
-		const queryParams = [];
+		const qs: any = {};
+		if (top) qs.$top = Math.min(top, 100);
+		if (skip) qs.$skip = skip;
+		if (filter) qs.$filter = filter;
+		if (select) qs.$select = select;
+		if (orderby) qs.$orderby = orderby;
+		if (count) qs.$count = true;
 
-		if (top) queryParams.push(`$top=${Math.min(top, 100)}`);
-		if (skip) queryParams.push(`$skip=${skip}`);
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (select) queryParams.push(`$select=${select}`);
-		if (orderby) queryParams.push(`$orderby=${orderby}`);
-		if (count) queryParams.push(`$count=true`);
-
-		if (queryParams.length > 0) {
-			url += '?' + queryParams.join('&');
-		}
-
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/QueueItems', {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'getQueueItem') {
 		const queueItemKey = this.getNodeParameter('queueItemKey', i) as string;
@@ -240,37 +234,25 @@ export async function executeQueuesOperations(
 		const skip = this.getNodeParameter('skip', i) as number;
 		const orderby = this.getNodeParameter('orderby', i) as string;
 
-		let url = '/odata/QueueItemComments';
-		const queryParams = [];
+		const qs: any = {};
+		if (top) qs.$top = Math.min(top, 100);
+		if (skip) qs.$skip = skip;
+		if (filter) qs.$filter = filter;
+		if (orderby) qs.$orderby = orderby;
 
-		if (top) queryParams.push(`$top=${Math.min(top, 100)}`);
-		if (skip) queryParams.push(`$skip=${skip}`);
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (orderby) queryParams.push(`$orderby=${orderby}`);
-
-		if (queryParams.length > 0) {
-			url += '?' + queryParams.join('&');
-		}
-
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/QueueItemComments', {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'getQueueItemCommentHistory') {
 		const filter = this.getNodeParameter('filter', i) as string;
 		const top = this.getNodeParameter('top', i) as number;
 		const orderby = this.getNodeParameter('orderby', i) as string;
 
-		let url = '/odata/QueueItemComments/UiPath.Server.Configuration.OData.GetQueueItemCommentsHistory';
-		const queryParams = [];
+		const qs: any = {};
+		if (top) qs.$top = Math.min(top, 100);
+		if (filter) qs.$filter = filter;
+		if (orderby) qs.$orderby = orderby;
 
-		if (top) queryParams.push(`$top=${Math.min(top, 100)}`);
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (orderby) queryParams.push(`$orderby=${orderby}`);
-
-		if (queryParams.length > 0) {
-			url += '?' + queryParams.join('&');
-		}
-
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/QueueItemComments/UiPath.Server.Configuration.OData.GetQueueItemCommentsHistory', {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'createQueueItemComment') {
 		const queueItemId = this.getNodeParameter('queueItemId', i) as number;
@@ -319,37 +301,25 @@ export async function executeQueuesOperations(
 		const skip = this.getNodeParameter('skip', i) as number;
 		const orderby = this.getNodeParameter('orderby', i) as string;
 
-		let url = '/odata/QueueItemEvents';
-		const queryParams = [];
+		const qs: any = {};
+		if (top) qs.$top = Math.min(top, 100);
+		if (skip) qs.$skip = skip;
+		if (filter) qs.$filter = filter;
+		if (orderby) qs.$orderby = orderby || 'CreatedDate desc';
 
-		if (top) queryParams.push(`$top=${Math.min(top, 100)}`);
-		if (skip) queryParams.push(`$skip=${skip}`);
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (orderby) queryParams.push(`$orderby=${orderby || 'CreatedDate desc'}`);
-
-		if (queryParams.length > 0) {
-			url += '?' + queryParams.join('&');
-		}
-
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/QueueItemEvents', {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'getQueueItemEventHistory') {
 		const filter = this.getNodeParameter('filter', i) as string;
 		const top = this.getNodeParameter('top', i) as number;
 		const orderby = this.getNodeParameter('orderby', i) as string;
 
-		let url = '/odata/QueueItemEvents/UiPath.Server.Configuration.OData.GetQueueItemEventsHistory';
-		const queryParams = [];
+		const qs: any = {};
+		if (top) qs.$top = Math.min(top, 100);
+		if (filter) qs.$filter = filter;
+		if (orderby) qs.$orderby = orderby;
 
-		if (top) queryParams.push(`$top=${Math.min(top, 100)}`);
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (orderby) queryParams.push(`$orderby=${orderby}`);
-
-		if (queryParams.length > 0) {
-			url += '?' + queryParams.join('&');
-		}
-
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/QueueItemEvents/UiPath.Server.Configuration.OData.GetQueueItemEventsHistory', {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'setTransactionProgress') {
 		const queueItemId = this.getNodeParameter('queueItemId', i) as number;
@@ -502,13 +472,11 @@ export async function executeQueuesOperations(
 		const expand = this.getNodeParameter('$expand', i, '') as string;
 		const select = this.getNodeParameter('$select', i, '') as string;
 		
-		let url = `/odata/QueueItems('${queueItemKey}')/UiPath.Server.Configuration.OData.GetItemLastRetry`;
-		const queryParams: string[] = [];
-		if (expand) queryParams.push(`$expand=${expand}`);
-		if (select) queryParams.push(`$select=${select}`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
+		const qs: any = {};
+		if (expand) qs.$expand = expand;
+		if (select) qs.$select = select;
 		
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/QueueItems('${queueItemKey}')/UiPath.Server.Configuration.OData.GetItemLastRetry`, {}, qs);
 	} else if (operation === 'getItemProcessingHistory') {
 		const queueItemKey = this.getNodeParameter('queueItemKey', i) as string;
 		
@@ -522,16 +490,14 @@ export async function executeQueuesOperations(
 		const skip = this.getNodeParameter('skip', i, 0) as number;
 		const select = this.getNodeParameter('select', i, '') as string;
 		
-		let url = `/odata/QueueItems('${queueItemKey}')/UiPathODataSvc.GetItemProcessingHistory`;
-		const queryParams: string[] = [];
-		if (filter) queryParams.push(`$filter=${encodeURIComponent(filter)}`);
-		if (orderby) queryParams.push(`$orderby=${orderby}`);
-		if (top > 0) queryParams.push(`$top=${top}`);
-		if (skip > 0) queryParams.push(`$skip=${skip}`);
-		if (select) queryParams.push(`$select=${select}`);
-		if (queryParams.length > 0) url += `?${queryParams.join('&')}`;
+		const qs: any = {};
+		if (filter) qs.$filter = filter;
+		if (orderby) qs.$orderby = orderby;
+		if (top > 0) qs.$top = top;
+		if (skip > 0) qs.$skip = skip;
+		if (select) qs.$select = select;
 		
-		responseData = await uiPathApiRequest.call(this, 'GET', url);
+		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/QueueItems('${queueItemKey}')/UiPathODataSvc.GetItemProcessingHistory`, {}, qs);
 		responseData = responseData.value || responseData;
 	}
 
