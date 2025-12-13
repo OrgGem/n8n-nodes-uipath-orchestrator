@@ -40,7 +40,6 @@ describe('Processes Operations', () => {
   it('should get all processes', async () => {
     const result = await Processes.executeProcessesOperations.call(context, 0, 'getAll');
     expect(called.method).to.equal('GET');
-    expect(called.url).to.include('/odata/Packages');
     expect(called.url).to.include('/odata/Releases');
     expect(result[0].Key).to.equal('process1');
   });
@@ -52,6 +51,7 @@ describe('Processes Operations', () => {
     };
     const _result = await Processes.executeProcessesOperations.call(context, 0, 'downloadPackage');
     expect(called.method).to.equal('GET');
+    expect(called.url).to.include('/odata/Packages/UiPath.Server.Configuration.OData.DownloadPackage');
   });
 
   it('should get process versions', async () => {
