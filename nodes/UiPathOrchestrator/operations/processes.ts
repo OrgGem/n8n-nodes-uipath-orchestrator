@@ -39,8 +39,8 @@ export async function executeProcessesOperations(
 		// 2. Buffer handling with this.helpers.prepareBinaryData()
 		// 3. Return format: { json: {...}, binary: { data: binaryItem } }
 		
-		// URL encode the process key to handle special characters
-		let url = `/odata/Processes/UiPath.Server.Configuration.OData.DownloadPackage(key='${encodeURIComponent(processKey)}')`;
+		// Use Packages entity set per Swagger/On-Prem guides
+		let url = `/odata/Packages/UiPath.Server.Configuration.OData.DownloadPackage(key='${encodeURIComponent(processKey)}')`;
 		if (feedId) url += `?feedId=${encodeURIComponent(feedId)}`;
 		
 		responseData = await uiPathApiRequest.call(this, 'GET', url);
