@@ -19,7 +19,8 @@ export async function executeProcessesOperations(
 		}
 		
 		// URL encode the process key to handle special characters
-		let url = `/odata/Releases('${encodeURIComponent(processKey)}')`;
+		// Use Processes entity set per UiPath on-premise API v16.0 swagger
+		let url = `/odata/Processes('${encodeURIComponent(processKey)}')`;
 		if (feedId) url += `?feedId=${encodeURIComponent(feedId)}`;
 		
 		responseData = await uiPathApiRequest.call(this, 'DELETE', url);
@@ -39,8 +40,8 @@ export async function executeProcessesOperations(
 		// 2. Buffer handling with this.helpers.prepareBinaryData()
 		// 3. Return format: { json: {...}, binary: { data: binaryItem } }
 		
-		// Use Packages entity set per Swagger/On-Prem guides
-		let url = `/odata/Packages/UiPath.Server.Configuration.OData.DownloadPackage(key='${encodeURIComponent(processKey)}')`;
+		// Use Processes entity set per UiPath on-premise API v16.0 swagger
+		let url = `/odata/Processes/UiPath.Server.Configuration.OData.DownloadPackage(key='${encodeURIComponent(processKey)}')`;
 		if (feedId) url += `?feedId=${encodeURIComponent(feedId)}`;
 		
 		responseData = await uiPathApiRequest.call(this, 'GET', url);
@@ -61,10 +62,11 @@ export async function executeProcessesOperations(
 		const topValue = Math.min(take > 0 ? take : 20, 1000);
 		const skipValue = skip > 0 ? skip : 0;
 		
+		// Use Processes entity set per UiPath on-premise API v16.0 swagger
 		responseData = await uiPathApiRequest.call(
 			this,
 			'GET',
-			`/odata/Releases?$top=${topValue}&$skip=${skipValue}`,
+			`/odata/Processes?$top=${topValue}&$skip=${skipValue}`,
 		);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'getArguments') {
@@ -81,7 +83,8 @@ export async function executeProcessesOperations(
 		if (expand) qs.$expand = expand;
 		if (select) qs.$select = select;
 		
-		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/Releases/UiPath.Server.Configuration.OData.GetArguments(key='${encodeURIComponent(processKey)}')`, {}, qs);
+		// Use Processes entity set per UiPath on-premise API v16.0 swagger
+		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/Processes/UiPath.Server.Configuration.OData.GetArguments(key='${encodeURIComponent(processKey)}')`, {}, qs);
 		
 		// Normalize response structure
 		if (responseData && responseData.value !== undefined) {
@@ -113,7 +116,8 @@ export async function executeProcessesOperations(
 		if (skip && skip > 0) qs.$skip = skip;
 		if (count) qs.$count = true;
 		
-		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/Releases/UiPath.Server.Configuration.OData.GetProcessVersions(processId='${encodeURIComponent(processId)}')`, {}, qs);
+		// Use Processes entity set per UiPath on-premise API v16.0 swagger
+		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/Processes/UiPath.Server.Configuration.OData.GetProcessVersions(processId='${encodeURIComponent(processId)}')`, {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'uploadPackage') {
 		const feedId = this.getNodeParameter('feedIdUpload', i, '') as string;
@@ -179,10 +183,11 @@ export async function executeProcessesOperations(
 			arguments: argumentsObj,
 		};
 		
+		// Use Processes entity set per UiPath on-premise API v16.0 swagger
 		responseData = await uiPathApiRequest.call(
 			this,
 			'POST',
-			'/odata/Releases/UiPath.Server.Configuration.OData.SetArguments',
+			'/odata/Processes/UiPath.Server.Configuration.OData.SetArguments',
 			body,
 		);
 		

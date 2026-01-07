@@ -261,6 +261,8 @@ export async function executeJobsOperations(
 		);
 	}
 	// JobTriggers - Deliver payload (API) or Get payload (API)
+	// NOTE: These endpoints are not available in UiPath on-premise API v16.0
+	// They may be available in newer versions or cloud-only deployments
 	else if (operation === 'jobTriggerDeliver') {
 		const inboxId = this.getNodeParameter('inboxId', i) as string;
 		const payloadStr = this.getNodeParameter('payload', i) as string;
