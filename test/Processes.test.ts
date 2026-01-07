@@ -27,7 +27,8 @@ describe('Processes Operations', () => {
         uiPathApiRequest: {
           call: async function(self: any, method: string, url: string, body?: any) {
             called = { method, url, body };
-            if (method === 'GET' && (url.includes('/odata/Releases') || url.includes('/odata/Packages'))) {
+            // Updated to match UiPath on-premise API v16.0 swagger - uses /odata/Processes
+            if (method === 'GET' && url.includes('/odata/Processes')) {
               return { value: [{ Id: 1, Key: 'process1', Name: 'TestProcess' }] };
             }
             return {};
@@ -40,7 +41,8 @@ describe('Processes Operations', () => {
   it('should get all processes', async () => {
     const result = await Processes.executeProcessesOperations.call(context, 0, 'getAll');
     expect(called.method).to.equal('GET');
-    expect(called.url).to.include('/odata/Releases');
+    // Updated to match UiPath on-premise API v16.0 swagger
+    expect(called.url).to.include('/odata/Processes');
     expect(result[0].Key).to.equal('process1');
   });
 
@@ -51,7 +53,8 @@ describe('Processes Operations', () => {
     };
     const _result = await Processes.executeProcessesOperations.call(context, 0, 'downloadPackage');
     expect(called.method).to.equal('GET');
-    expect(called.url).to.include('/odata/Packages/UiPath.Server.Configuration.OData.DownloadPackage');
+    // Updated to match UiPath on-premise API v16.0 swagger - uses /odata/Processes not /odata/Packages
+    expect(called.url).to.include('/odata/Processes/UiPath.Server.Configuration.OData.DownloadPackage');
   });
 
   it('should get process versions', async () => {
