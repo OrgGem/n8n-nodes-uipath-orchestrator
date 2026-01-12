@@ -228,36 +228,32 @@ export async function executeJobsOperations(
 		);
 	} else if (operation === 'validateExistingJob') {
 		const jobId = this.getNodeParameter('jobId', i) as number;
-		const inputArgumentsStr = this.getNodeParameter('inputArguments', i) as string;
+		const expand = this.getNodeParameter('$expand', i, '') as string;
+		const select = this.getNodeParameter('$select', i, '') as string;
 
 		// Add validation for jobId
 		if (!jobId || jobId <= 0) {
 			throw new NodeOperationError(this.getNode(), 'Valid Job ID is required');
 		}
 
-		let inputArguments = {};
-		try {
-			if (inputArgumentsStr && inputArgumentsStr.trim() !== '{}') {
-				inputArguments = JSON.parse(inputArgumentsStr);
-			}
-		} catch (error) {
-			throw new NodeOperationError(
-				this.getNode(),
-				`Invalid JSON in Input Arguments: ${(error as Error).message}`,
-			);
+		const qs: IDataObject = {};
+		if (expand) qs.$expand = expand;
+		if (select) qs.$select = select;
+
+		const headers: IDataObject = {};
+		const organizationUnitId = this.getNodeParameter('organizationUnitId', i, 0) as number;
+		if (organizationUnitId) {
+			headers['X-UIPATH-OrganizationUnitId'] = organizationUnitId.toString();
 		}
 
-		const body: IDataObject = {
-			startInfo: {
-				InputArguments: JSON.stringify(inputArguments),
-			},
-		};
-
+		// Per swagger.json, ValidateExistingJob does not accept a body parameter
 		responseData = await uiPathApiRequest.call(
 			this,
 			'POST',
 			`/odata/Jobs(${jobId})/UiPath.Server.Configuration.OData.ValidateExistingJob`,
-			body,
+			{},
+			qs,
+			headers,
 		);
 	}
 	// JobTriggers - Deliver payload (API) or Get payload (API)

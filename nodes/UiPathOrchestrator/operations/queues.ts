@@ -48,7 +48,7 @@ export async function executeQueuesOperations(
 			queueItemData.Reference = reference;
 		}
 		if (dueDate) queueItemData.DueDate = dueDate;
-		
+
 		// Preserve other custom properties from JSON input
 		Object.assign(queueItemData, itemData);
 
@@ -243,16 +243,21 @@ export async function executeQueuesOperations(
 		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/QueueItemComments', {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'getQueueItemCommentHistory') {
+		const queueItemId = this.getNodeParameter('queueItemId', i) as number;
 		const filter = this.getNodeParameter('filter', i) as string;
 		const top = this.getNodeParameter('top', i) as number;
 		const orderby = this.getNodeParameter('orderby', i) as string;
+
+		if (!queueItemId || queueItemId <= 0) {
+			throw new NodeOperationError(this.getNode(), 'Valid queue item ID is required');
+		}
 
 		const qs: any = {};
 		if (top) qs.$top = Math.min(top, 100);
 		if (filter) qs.$filter = filter;
 		if (orderby) qs.$orderby = orderby;
 
-		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/QueueItemComments/UiPath.Server.Configuration.OData.GetQueueItemCommentsHistory', {}, qs);
+		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/QueueItemComments/UiPath.Server.Configuration.OData.GetQueueItemCommentsHistory(queueItemId=${queueItemId})`, {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'createQueueItemComment') {
 		const queueItemId = this.getNodeParameter('queueItemId', i) as number;
@@ -310,16 +315,21 @@ export async function executeQueuesOperations(
 		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/QueueItemEvents', {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'getQueueItemEventHistory') {
+		const queueItemId = this.getNodeParameter('queueItemId', i) as number;
 		const filter = this.getNodeParameter('filter', i) as string;
 		const top = this.getNodeParameter('top', i) as number;
 		const orderby = this.getNodeParameter('orderby', i) as string;
+
+		if (!queueItemId || queueItemId <= 0) {
+			throw new NodeOperationError(this.getNode(), 'Valid queue item ID is required');
+		}
 
 		const qs: any = {};
 		if (top) qs.$top = Math.min(top, 100);
 		if (filter) qs.$filter = filter;
 		if (orderby) qs.$orderby = orderby;
 
-		responseData = await uiPathApiRequest.call(this, 'GET', '/odata/QueueItemEvents/UiPath.Server.Configuration.OData.GetQueueItemEventsHistory', {}, qs);
+		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/QueueItemEvents/UiPath.Server.Configuration.OData.GetQueueItemEventsHistory(queueItemId=${queueItemId})`, {}, qs);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'setTransactionProgress') {
 		const queueItemId = this.getNodeParameter('queueItemId', i) as number;
@@ -464,39 +474,39 @@ export async function executeQueuesOperations(
 		);
 	} else if (operation === 'getItemLastRetry') {
 		const queueItemKey = this.getNodeParameter('queueItemKey', i) as string;
-		
+
 		if (!queueItemKey) {
 			throw new NodeOperationError(this.getNode(), 'Queue item key is required');
 		}
-		
+
 		const expand = this.getNodeParameter('$expand', i, '') as string;
 		const select = this.getNodeParameter('$select', i, '') as string;
-		
+
 		const qs: any = {};
 		if (expand) qs.$expand = expand;
 		if (select) qs.$select = select;
-		
+
 		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/QueueItems('${queueItemKey}')/UiPath.Server.Configuration.OData.GetItemLastRetry`, {}, qs);
 	} else if (operation === 'getItemProcessingHistory') {
 		const queueItemKey = this.getNodeParameter('queueItemKey', i) as string;
-		
+
 		if (!queueItemKey) {
 			throw new NodeOperationError(this.getNode(), 'Queue item key is required');
 		}
-		
+
 		const filter = this.getNodeParameter('filter', i, '') as string;
 		const orderby = this.getNodeParameter('orderby', i, '') as string;
 		const top = this.getNodeParameter('top', i, 0) as number;
 		const skip = this.getNodeParameter('skip', i, 0) as number;
 		const select = this.getNodeParameter('select', i, '') as string;
-		
+
 		const qs: any = {};
 		if (filter) qs.$filter = filter;
 		if (orderby) qs.$orderby = orderby;
 		if (top > 0) qs.$top = top;
 		if (skip > 0) qs.$skip = skip;
 		if (select) qs.$select = select;
-		
+
 		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/QueueItems('${queueItemKey}')/UiPathODataSvc.GetItemProcessingHistory`, {}, qs);
 		responseData = responseData.value || responseData;
 	}
