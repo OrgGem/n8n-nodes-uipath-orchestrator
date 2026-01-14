@@ -54,24 +54,24 @@ export const jobsOperations: INodeProperties[] = [
 				description: 'Stop one or more jobs',
 				action: 'Stop jobs',
 			},
-		{
-			name: 'Validate Job',
-			value: 'validateJob',
-			description: 'Validate job input before starting',
-			action: 'Validate job input',
-		},
-		{
-			name: 'Stop Job (by ID)',
-			value: 'stopJob',
-			description: 'Stop a job by its ID',
-			action: 'Stop job by ID',
-		},
-		{
-			name: 'Validate Existing Job',
-			value: 'validateExistingJob',
-			description: 'Validate input for an existing job',
-			action: 'Validate existing job',
-		},
+			{
+				name: 'Validate Job',
+				value: 'validateJob',
+				description: 'Validate job input before starting',
+				action: 'Validate job input',
+			},
+			{
+				name: 'Stop Job (by ID)',
+				value: 'stopJob',
+				description: 'Stop a job by its ID',
+				action: 'Stop job by ID',
+			},
+			{
+				name: 'Validate Existing Job',
+				value: 'validateExistingJob',
+				description: 'Validate input for an existing job',
+				action: 'Validate existing job',
+			},
 			{
 				name: 'JobTriggers: Deliver Payload',
 				value: 'jobTriggerDeliver',
@@ -96,10 +96,10 @@ export const jobsOperations: INodeProperties[] = [
 				description: 'Get JobTriggers by job key using OData function',
 				action: 'Get JobTriggers by job key',
 			},
-	],
-	default: 'getAll',
+		],
+		default: 'getAll',
 	},
-];export const jobsFields: INodeProperties[] = [
+]; export const jobsFields: INodeProperties[] = [
 	// GetAll operation fields
 	{
 		displayName: 'Take',
@@ -131,7 +131,10 @@ export const jobsOperations: INodeProperties[] = [
 	{
 		displayName: 'Job ID',
 		name: 'jobId',
-		type: 'number',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getJobs',
+		},
 		displayOptions: {
 			show: {
 				resource: ['jobs'],
@@ -139,14 +142,17 @@ export const jobsOperations: INodeProperties[] = [
 			},
 		},
 		required: true,
-		default: 0,
+		default: '',
 		description: 'The ID of the job to retrieve',
 	},
 	// StartJobs operation fields
 	{
 		displayName: 'Release Key',
 		name: 'releaseKey',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getProcesses',
+		},
 		displayOptions: {
 			show: {
 				resource: ['jobs'],
@@ -242,7 +248,10 @@ export const jobsOperations: INodeProperties[] = [
 	{
 		displayName: 'Job ID',
 		name: 'jobId',
-		type: 'number',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getJobs',
+		},
 		displayOptions: {
 			show: {
 				resource: ['jobs'],
@@ -250,7 +259,7 @@ export const jobsOperations: INodeProperties[] = [
 			},
 		},
 		required: true,
-		default: 0,
+		default: '',
 		description: 'The ID of the job to stop',
 	},
 	{
@@ -282,7 +291,10 @@ export const jobsOperations: INodeProperties[] = [
 	{
 		displayName: 'Job ID',
 		name: 'jobId',
-		type: 'number',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getJobs',
+		},
 		displayOptions: {
 			show: {
 				resource: ['jobs'],
@@ -290,7 +302,7 @@ export const jobsOperations: INodeProperties[] = [
 			},
 		},
 		required: true,
-		default: 0,
+		default: '',
 		description: 'The ID of the job to restart',
 	},
 	// ResumeJob operation fields
@@ -339,7 +351,10 @@ export const jobsOperations: INodeProperties[] = [
 	{
 		displayName: 'Release Key',
 		name: 'releaseKey',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getProcesses',
+		},
 		displayOptions: {
 			show: {
 				resource: ['jobs'],
@@ -371,7 +386,7 @@ export const jobsOperations: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['jobs'],
-				operation: ['jobTriggerDeliver','jobTriggerGetPayload'],
+				operation: ['jobTriggerDeliver', 'jobTriggerGetPayload'],
 			},
 		},
 		required: true,

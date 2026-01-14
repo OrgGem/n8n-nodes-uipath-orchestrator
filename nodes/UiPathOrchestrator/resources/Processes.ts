@@ -64,7 +64,10 @@ export const processesFields: INodeProperties[] = [
 	{
 		displayName: 'Process Key',
 		name: 'processKeyDelete',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getProcesses',
+		},
 		displayOptions: {
 			show: {
 				resource: ['processes'],
@@ -88,7 +91,7 @@ export const processesFields: INodeProperties[] = [
 		default: '',
 		description: 'Optional: The feed ID for the package repository',
 	},
-	
+
 	// GetAll operation fields
 	{
 		displayName: 'Take',
@@ -116,12 +119,15 @@ export const processesFields: INodeProperties[] = [
 		default: 0,
 		description: 'Number of items to skip',
 	},
-	
+
 	// DownloadPackage operation fields
 	{
 		displayName: 'Process Key',
 		name: 'processKey',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getProcesses',
+		},
 		displayOptions: {
 			show: {
 				resource: ['processes'],
@@ -145,12 +151,15 @@ export const processesFields: INodeProperties[] = [
 		default: '',
 		description: 'Optional: The feed ID for the package',
 	},
-	
+
 	// GetArguments operation fields
 	{
 		displayName: 'Process Key',
 		name: 'processKeyArgs',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getProcesses',
+		},
 		displayOptions: {
 			show: {
 				resource: ['processes'],
@@ -187,12 +196,15 @@ export const processesFields: INodeProperties[] = [
 		default: '',
 		description: 'Optional: Limit properties returned in result',
 	},
-	
+
 	// SetArguments operation fields
 	{
 		displayName: 'Process Key',
 		name: 'processKeySetArgs',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getProcesses',
+		},
 		displayOptions: {
 			show: {
 				resource: ['processes'],
@@ -218,12 +230,15 @@ export const processesFields: INodeProperties[] = [
 		description: 'JSON object defining input arguments with metadata (type, required, hasDefault, defaultValue)',
 		placeholder: '{"inputFile": {"type": "String", "required": true}, "timeout": {"type": "Int32", "hasDefault": true, "defaultValue": 30}}',
 	},
-	
+
 	// GetProcessVersions operation fields
 	{
 		displayName: 'Process ID',
 		name: 'processId',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getProcesses',
+		},
 		displayOptions: {
 			show: {
 				resource: ['processes'],
@@ -338,7 +353,7 @@ export const processesFields: INodeProperties[] = [
 		default: false,
 		description: 'Optional: Include total count in result',
 	},
-	
+
 	// UploadPackage operation fields (NOT IMPLEMENTED)
 	{
 		displayName: 'Notice',

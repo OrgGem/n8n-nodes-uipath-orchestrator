@@ -1,4 +1,4 @@
-import { IDataObject, JsonObject, NodeApiError, NodeOperationError, IExecuteFunctions } from 'n8n-workflow';
+import { IDataObject, JsonObject, NodeApiError, NodeOperationError, IExecuteFunctions, ILoadOptionsFunctions } from 'n8n-workflow';
 import https from 'https';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
@@ -72,7 +72,7 @@ async function getOAuthToken(
 			});
 		}
 
-    	const response = await axios.post(tokenUrl, tokenData, axiosOptions);
+		const response = await axios.post(tokenUrl, tokenData, axiosOptions);
 
 		const token = response.data.access_token;
 		const expiresIn = response.data.expires_in || 3600; // Default 1 hour
@@ -93,7 +93,7 @@ async function getOAuthToken(
 }
 
 async function uiPathApiRequest(
-	this: IExecuteFunctions,
+	this: IExecuteFunctions | ILoadOptionsFunctions,
 	method: string,
 	endpoint: string,
 	body?: IDataObject,
@@ -203,8 +203,8 @@ async function uiPathApiRequest(
 	}
 
 	if (ignoreSsl) {
-    	axiosConfig.httpsAgent = new https.Agent({
-        	rejectUnauthorized: false,
+		axiosConfig.httpsAgent = new https.Agent({
+			rejectUnauthorized: false,
 		});
 	}
 	try {
@@ -219,7 +219,7 @@ async function uiPathApiRequest(
 }
 
 async function uiPathApiRequestAllItems(
-	this: IExecuteFunctions,
+	this: IExecuteFunctions | ILoadOptionsFunctions,
 	propertyName: string,
 	method: string,
 	endpoint: string,

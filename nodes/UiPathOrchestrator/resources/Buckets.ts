@@ -104,458 +104,473 @@ export const bucketsOperations: INodeProperties[] = [
 export const bucketsFields: INodeProperties[] = [
 	// GetBuckets and GetBucketsAcrossFolders operation fields
 	{
-	 	displayName: 'Filter',
-	 	name: 'filter',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getBuckets', 'getBucketsAcrossFolders'],
-	 		},
-	 	},
-	 	default: '',
-	 	description: 'Optional: Filter expressions (max 100)',
+		displayName: 'Filter',
+		name: 'filter',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getBuckets', 'getBucketsAcrossFolders'],
+			},
+		},
+		default: '',
+		description: 'Optional: Filter expressions (max 100)',
 	},
 	{
-	 	displayName: 'Select',
-	 	name: 'select',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getBuckets', 'getBucketsAcrossFolders', 'getFoldersForBucket'],
-	 		},
-	 	},
-	 	default: '',
-	 	description: 'Optional: Limit properties returned',
+		displayName: 'Select',
+		name: 'select',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getBuckets', 'getBucketsAcrossFolders', 'getFoldersForBucket'],
+			},
+		},
+		default: '',
+		description: 'Optional: Limit properties returned',
 	},
 	{
-	 	displayName: 'Order By',
-	 	name: 'orderby',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getBuckets', 'getBucketsAcrossFolders'],
-	 		},
-	 	},
-	 	default: '',
-	 	description: 'Optional: Order expressions (max 5)',
+		displayName: 'Order By',
+		name: 'orderby',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getBuckets', 'getBucketsAcrossFolders'],
+			},
+		},
+		default: '',
+		description: 'Optional: Order expressions (max 5)',
 	},
 	{
-	 	displayName: 'Take (Limit)',
-	 	name: 'top',
-	 	type: 'number',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getBuckets', 'getBucketsAcrossFolders'],
-	 		},
-	 	},
-	 	default: 0,
-	 	description: 'Optional: Limit items returned (max 1000, 0 = no limit)',
+		displayName: 'Take (Limit)',
+		name: 'top',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getBuckets', 'getBucketsAcrossFolders'],
+			},
+		},
+		default: 0,
+		description: 'Optional: Limit items returned (max 1000, 0 = no limit)',
 	},
 	{
-	 	displayName: 'Skip',
-	 	name: 'skip',
-	 	type: 'number',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getBuckets', 'getBucketsAcrossFolders'],
-	 		},
-	 	},
-	 	default: 0,
-	 	description: 'Optional: Number of items to skip',
+		displayName: 'Skip',
+		name: 'skip',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getBuckets', 'getBucketsAcrossFolders'],
+			},
+		},
+		default: 0,
+		description: 'Optional: Number of items to skip',
 	},
 	{
-	 	displayName: 'Count',
-	 	name: 'count',
-	 	type: 'boolean',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getBuckets', 'getBucketsAcrossFolders'],
-	 		},
-	 	},
-	 	default: false,
-	 	description: 'Optional: Include total count in result',
+		displayName: 'Count',
+		name: 'count',
+		type: 'boolean',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getBuckets', 'getBucketsAcrossFolders'],
+			},
+		},
+		default: false,
+		description: 'Optional: Include total count in result',
 	},
-	
+
 	// GetBucketsAcrossFolders specific fields
 	{
-	 	displayName: 'Exclude Folder ID',
-	 	name: 'excludeFolderId',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getBucketsAcrossFolders'],
-	 		},
-	 	},
-	 	default: '',
-	 	description: 'Optional: Folder ID to exclude from results',
+		displayName: 'Exclude Folder ID',
+		name: 'excludeFolderId',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getBucketsAcrossFolders'],
+			},
+		},
+		default: '',
+		description: 'Optional: Folder ID to exclude from results',
 	},
-	
+
 	// GetFoldersForBucket specific fields
 	{
-	 	displayName: 'Bucket ID',
-	 	name: 'bucketId',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getFoldersForBucket'],
-	 		},
-	 	},
-	 	default: '',
-	 	required: true,
-	 	description: 'The bucket ID to get folders for',
+		displayName: 'Bucket ID',
+		name: 'bucketId',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getBucketsById',
+		},
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getFoldersForBucket'],
+			},
+		},
+		default: '',
+		required: true,
+		description: 'The bucket ID to get folders for',
 	},
 	{
-	 	displayName: 'Expand',
-	 	name: 'expand',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getFoldersForBucket'],
-	 		},
-	 	},
-	 	default: '',
-	 	description: 'Optional: Related entities to represent inline',
+		displayName: 'Expand',
+		name: 'expand',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getFoldersForBucket'],
+			},
+		},
+		default: '',
+		description: 'Optional: Related entities to represent inline',
 	},
 
 	// CreateBucket operation fields
 	{
-	 	displayName: 'Bucket Name',
-	 	name: 'name',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['createBucket'],
-	 		},
-	 	},
-	 	default: '',
-	 	required: true,
-	 	description: 'Name for the new bucket',
+		displayName: 'Bucket Name',
+		name: 'name',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['createBucket'],
+			},
+		},
+		default: '',
+		required: true,
+		description: 'Name for the new bucket',
 	},
 	{
-	 	displayName: 'Description',
-	 	name: 'description',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['createBucket','updateBucket'],
-	 		},
-	 	},
-	 	default: '',
-	 	description: 'Optional bucket description',
+		displayName: 'Description',
+		name: 'description',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['createBucket', 'updateBucket'],
+			},
+		},
+		default: '',
+		description: 'Optional bucket description',
 	},
 	{
-	 	displayName: 'Bucket Type',
-	 	name: 'bucketType',
-	 	type: 'options',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['createBucket'],
-	 		},
-	 	},
-	 	options: [
-	 		{
-	 			name: 'FileSystem',
-	 			value: 'FileSystem',
-	 		},
-	 		{
-	 			name: 'Azure Blob',
-	 			value: 'AzureBlob',
-	 		},
-	 		{
-	 			name: 'Amazon S3',
-	 			value: 'AmazonS3',
-	 		},
-	 		{
-	 			name: 'MinIO',
-	 			value: 'MinIO',
-	 		},
-	 	],
-	 	default: 'FileSystem',
-	 	description: 'Storage provider type for the bucket',
+		displayName: 'Bucket Type',
+		name: 'bucketType',
+		type: 'options',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['createBucket'],
+			},
+		},
+		options: [
+			{
+				name: 'FileSystem',
+				value: 'FileSystem',
+			},
+			{
+				name: 'Azure Blob',
+				value: 'AzureBlob',
+			},
+			{
+				name: 'Amazon S3',
+				value: 'AmazonS3',
+			},
+			{
+				name: 'MinIO',
+				value: 'MinIO',
+			},
+		],
+		default: 'FileSystem',
+		description: 'Storage provider type for the bucket',
 	},
 	{
-	 	displayName: 'Is Active',
-	 	name: 'isActive',
-	 	type: 'boolean',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['createBucket','updateBucket'],
-	 		},
-	 	},
-	 	default: true,
-	 	description: 'Whether the bucket is active',
+		displayName: 'Is Active',
+		name: 'isActive',
+		type: 'boolean',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['createBucket', 'updateBucket'],
+			},
+		},
+		default: true,
+		description: 'Whether the bucket is active',
 	},
 
 	// GetBucket operation fields
 	{
-	 	displayName: 'Bucket ID',
-	 	name: 'bucketId',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getBucket','updateBucket','deleteBucket','getDirectories','listFiles','getFile','deleteFile','getReadUri','getWriteUri','shareToFolders'],
-	 		},
-	 	},
-	 	default: '',
-	 	required: true,
-	 	description: 'The unique identifier of the bucket',
+		displayName: 'Bucket ID',
+		name: 'bucketId',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getBucketsById',
+		},
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getBucket', 'updateBucket', 'deleteBucket', 'getDirectories', 'listFiles', 'getFile', 'deleteFile', 'getReadUri', 'getWriteUri', 'shareToFolders'],
+			},
+		},
+		default: '',
+		required: true,
+		description: 'The unique identifier of the bucket',
 	},
 	{
-	 	displayName: 'Expand',
-	 	name: 'expand',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getBucket'],
-	 		},
-	 	},
-	 	default: '',
-	 	description: 'Optional: Related entities to represent inline',
+		displayName: 'Expand',
+		name: 'expand',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getBucket'],
+			},
+		},
+		default: '',
+		description: 'Optional: Related entities to represent inline',
 	},
 	{
-	 	displayName: 'Select',
-	 	name: 'select',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getBucket'],
-	 		},
-	 	},
-	 	default: '',
-	 	description: 'Optional: Limit properties returned',
+		displayName: 'Select',
+		name: 'select',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getBucket'],
+			},
+		},
+		default: '',
+		description: 'Optional: Limit properties returned',
 	},
 
 	// UpdateBucket operation fields
 	{
-	 	displayName: 'Bucket ID',
-	 	name: 'bucketId',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['updateBucket'],
-	 		},
-	 	},
-	 	default: '',
-	 	required: true,
-	 	description: 'The unique identifier of the bucket to update',
+		displayName: 'Bucket ID',
+		name: 'bucketId',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getBucketsById',
+		},
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['updateBucket'],
+			},
+		},
+		default: '',
+		required: true,
+		description: 'The unique identifier of the bucket to update',
 	},
 
 	// DeleteBucket operation fields
 	{
-	 	displayName: 'Bucket ID',
-	 	name: 'bucketId',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['deleteBucket'],
-	 		},
-	 	},
-	 	default: '',
-	 	required: true,
-	 	description: 'The unique identifier of the bucket to delete',
+		displayName: 'Bucket ID',
+		name: 'bucketId',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getBucketsById',
+		},
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['deleteBucket'],
+			},
+		},
+		default: '',
+		required: true,
+		description: 'The unique identifier of the bucket to delete',
 	},
 
 	// GetDirectories operation fields
 	{
-	 	displayName: 'Directory',
-	 	name: 'directory',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getDirectories'],
-	 		},
-	 	},
-	 	default: '',
-	 	description: 'Optional: Directory to list',
+		displayName: 'Directory',
+		name: 'directory',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getDirectories'],
+			},
+		},
+		default: '',
+		description: 'Optional: Directory to list',
 	},
 	{
-	 	displayName: 'Take (Limit)',
-	 	name: 'top',
-	 	type: 'number',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getDirectories'],
-	 		},
-	 	},
-	 	default: 0,
-	 	description: 'Optional: Limit items returned (max 1000, 0 = no limit)',
+		displayName: 'Take (Limit)',
+		name: 'top',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getDirectories'],
+			},
+		},
+		default: 0,
+		description: 'Optional: Limit items returned (max 1000, 0 = no limit)',
 	},
 	{
-	 	displayName: 'Skip',
-	 	name: 'skip',
-	 	type: 'number',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getDirectories'],
-	 		},
-	 	},
-	 	default: 0,
-	 	description: 'Optional: Number of items to skip',
+		displayName: 'Skip',
+		name: 'skip',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getDirectories'],
+			},
+		},
+		default: 0,
+		description: 'Optional: Number of items to skip',
 	},
-	
+
 	// ListFiles operation fields
 	{
-	 	displayName: 'Bucket ID',
-	 	name: 'bucketId',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['listFiles'],
-	 		},
-	 	},
-	 	default: '',
-	 	required: true,
-	 	description: 'The Bucket ID',
+		displayName: 'Bucket ID',
+		name: 'bucketId',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getBucketsById',
+		},
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['listFiles'],
+			},
+		},
+		default: '',
+		required: true,
+		description: 'The Bucket ID',
 	},
 	{
-	 	displayName: 'Directory',
-	 	name: 'directory',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['listFiles'],
-	 		},
-	 	},
-	 	default: '',
-	 	description: 'Optional: The directory path to list',
+		displayName: 'Directory',
+		name: 'directory',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['listFiles'],
+			},
+		},
+		default: '',
+		description: 'Optional: The directory path to list',
 	},
 	{
-	 	displayName: 'Recursive',
-	 	name: 'recursive',
-	 	type: 'boolean',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['listFiles'],
-	 		},
-	 	},
-	 	default: false,
-	 	description: 'Whether to list files recursively',
+		displayName: 'Recursive',
+		name: 'recursive',
+		type: 'boolean',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['listFiles'],
+			},
+		},
+		default: false,
+		description: 'Whether to list files recursively',
 	},
 	{
-	 	displayName: 'File Name Glob',
-	 	name: 'fileNameGlob',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['listFiles'],
-	 		},
-	 	},
-	 	default: '',
-	 	description: 'Optional: Glob pattern to filter file names',
+		displayName: 'File Name Glob',
+		name: 'fileNameGlob',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['listFiles'],
+			},
+		},
+		default: '',
+		description: 'Optional: Glob pattern to filter file names',
 	},
 	{
-	 	displayName: 'Take (Limit)',
-	 	name: 'top',
-	 	type: 'number',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['listFiles'],
-	 		},
-	 	},
-	 	default: 0,
-	 	description: 'Optional: Limit items returned (max 1000, 0 = no limit)',
+		displayName: 'Take (Limit)',
+		name: 'top',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['listFiles'],
+			},
+		},
+		default: 0,
+		description: 'Optional: Limit items returned (max 1000, 0 = no limit)',
 	},
 	{
-	 	displayName: 'Skip',
-	 	name: 'skip',
-	 	type: 'number',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['listFiles'],
-	 		},
-	 	},
-	 	default: 0,
-	 	description: 'Optional: Number of items to skip',
+		displayName: 'Skip',
+		name: 'skip',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['listFiles'],
+			},
+		},
+		default: 0,
+		description: 'Optional: Number of items to skip',
 	},
 
 	// GetFile / DeleteFile operation fields
 	{
-	 	displayName: 'Path',
-	 	name: 'path',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getFile','deleteFile','getReadUri','getWriteUri'],
-	 		},
-	 	},
-	 	default: '',
-	 	required: true,
-	 	placeholder: '/folder/filename.txt',
-	 	description: 'The file path within the bucket (must start with /)',
+		displayName: 'Path',
+		name: 'path',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getFile', 'deleteFile', 'getReadUri', 'getWriteUri'],
+			},
+		},
+		default: '',
+		required: true,
+		placeholder: '/folder/filename.txt',
+		description: 'The file path within the bucket (must start with /)',
 	},
 
 	// GetReadUri operation fields
 	{
-	 	displayName: 'Expiry In Minutes',
-	 	name: 'expiryInMinutes',
-	 	type: 'number',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getReadUri'],
-	 		},
-	 	},
-	 	default: 0,
-	 	description: 'Optional: Minutes before the read URL expires (0 = no expiry param)',
+		displayName: 'Expiry In Minutes',
+		name: 'expiryInMinutes',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getReadUri'],
+			},
+		},
+		default: 0,
+		description: 'Optional: Minutes before the read URL expires (0 = no expiry param)',
 	},
 
 	// GetWriteUri operation fields
 	{
-	 	displayName: 'Expiry In Minutes',
-	 	name: 'expiryInMinutes',
-	 	type: 'number',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getWriteUri'],
-	 		},
-	 	},
-	 	default: 0,
-	 	description: 'Optional: Minutes before the write URL expires (0 = no expiry param)',
+		displayName: 'Expiry In Minutes',
+		name: 'expiryInMinutes',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getWriteUri'],
+			},
+		},
+		default: 0,
+		description: 'Optional: Minutes before the write URL expires (0 = no expiry param)',
 	},
 	{
-	 	displayName: 'Content Type',
-	 	name: 'contentType',
-	 	type: 'string',
-	 	displayOptions: {
-	 		show: {
-	 			resource: ['buckets'],
-	 			operation: ['getWriteUri'],
-	 		},
-	 	},
-	 	default: '',
-	 	placeholder: 'application/octet-stream',
-	 	description: 'Optional: MIME type for the upload (e.g., application/json, text/plain, image/png)',
+		displayName: 'Content Type',
+		name: 'contentType',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['buckets'],
+				operation: ['getWriteUri'],
+			},
+		},
+		default: '',
+		placeholder: 'application/octet-stream',
+		description: 'Optional: MIME type for the upload (e.g., application/json, text/plain, image/png)',
 	},
-	
+
 	// ShareToFolders operation fields
 	{
 		displayName: 'Buckets JSON',

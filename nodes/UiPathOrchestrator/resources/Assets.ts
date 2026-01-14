@@ -100,7 +100,10 @@ export const assetsFields: INodeProperties[] = [
 	{
 		displayName: 'Asset ID',
 		name: 'assetIdForFolders',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getAssetsById',
+		},
 		displayOptions: {
 			show: {
 				resource: ['assets'],
@@ -146,7 +149,7 @@ export const assetsFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['assets'],
-				operation: ['getRobotAsset','getRobotAssetByNameForRobotKey','setRobotAssetByRobotKey'],
+				operation: ['getRobotAsset', 'getRobotAssetByNameForRobotKey', 'setRobotAssetByRobotKey'],
 			},
 		},
 		default: '',
@@ -155,17 +158,20 @@ export const assetsFields: INodeProperties[] = [
 	{
 		displayName: 'Asset Name',
 		name: 'assetName',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getAssets',
+		},
 		displayOptions: {
 			show: {
 				resource: ['assets'],
-				operation: ['getRobotAsset','getRobotAssetByNameForRobotKey','getRobotAssetByRobotId','setRobotAssetByRobotKey'],
+				operation: ['getRobotAsset', 'getRobotAssetByNameForRobotKey', 'getRobotAssetByRobotId', 'setRobotAssetByRobotKey'],
 			},
 		},
 		default: '',
 		description: 'The name of the asset',
 	},
-	
+
 	// GetRobotAssetByRobotId operation fields
 	{
 		displayName: 'Robot Numeric ID',
@@ -190,7 +196,7 @@ export const assetsFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['assets'],
-				operation: ['getRobotAssetByNameForRobotKey','setRobotAssetByRobotKey'],
+				operation: ['getRobotAssetByNameForRobotKey', 'setRobotAssetByRobotKey'],
 			},
 		},
 		default: '{}',
@@ -268,147 +274,150 @@ export const assetsFields: INodeProperties[] = [
 		description: 'Number of items to skip',
 	},
 
-// GetFiltered operation fields
-{
-	displayName: 'Filter',
-	name: 'filter',
-	type: 'string',
-	displayOptions: {
- 		show: {
- 			resource: ['assets'],
- 			operation: ['getFiltered'],
- 		},
- 	},
- 	default: '',
- 	description: 'OData filter expression',
-},
-{
- 	displayName: 'Select',
- 	name: 'select',
- 	type: 'string',
- 	displayOptions: {
- 		show: {
- 			resource: ['assets'],
- 			operation: ['getFiltered'],
- 		},
- 	},
- 	default: '',
- 	description: 'Optional: $select to limit properties',
-},
-{
- 	displayName: 'Take (Limit)',
- 	name: 'top',
- 	type: 'number',
- 	displayOptions: {
- 		show: {
- 			resource: ['assets'],
- 			operation: ['getFiltered'],
- 		},
- 	},
- 	default: 0,
- 	description: 'Optional: Limit items returned (max 1000, 0 = no limit)',
-},
-{
- 	displayName: 'Skip',
- 	name: 'skipFiltered',
- 	type: 'number',
- 	displayOptions: {
- 		show: {
- 			resource: ['assets'],
- 			operation: ['getFiltered'],
- 		},
- 	},
- 	default: 0,
- 	description: 'Optional: Number of items to skip',
-},
+	// GetFiltered operation fields
+	{
+		displayName: 'Filter',
+		name: 'filter',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['assets'],
+				operation: ['getFiltered'],
+			},
+		},
+		default: '',
+		description: 'OData filter expression',
+	},
+	{
+		displayName: 'Select',
+		name: 'select',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['assets'],
+				operation: ['getFiltered'],
+			},
+		},
+		default: '',
+		description: 'Optional: $select to limit properties',
+	},
+	{
+		displayName: 'Take (Limit)',
+		name: 'top',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['assets'],
+				operation: ['getFiltered'],
+			},
+		},
+		default: 0,
+		description: 'Optional: Limit items returned (max 1000, 0 = no limit)',
+	},
+	{
+		displayName: 'Skip',
+		name: 'skipFiltered',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['assets'],
+				operation: ['getFiltered'],
+			},
+		},
+		default: 0,
+		description: 'Optional: Number of items to skip',
+	},
 
-// Create / Update operation fields
-{
- 	displayName: 'Asset Name',
- 	name: 'name',
- 	type: 'string',
- 	displayOptions: {
- 		show: {
- 			resource: ['assets'],
- 			operation: ['createAsset','updateAsset'],
- 		},
- 	},
- 	default: '',
- 	required: true,
- 	description: 'Name of the asset',
-},
-{
- 	displayName: 'Value Type',
- 	name: 'valueType',
- 	type: 'options',
- 	options: [
- 		{ name: 'Text', value: 'Text' },
- 		{ name: 'Credential', value: 'Credential' },
- 		{ name: 'Certificate', value: 'Certificate' },
- 		{ name: 'KeyValueList', value: 'KeyValueList' },
- 	],
- 	displayOptions: {
- 		show: {
- 			resource: ['assets'],
- 			operation: ['createAsset','updateAsset'],
- 		},
- 	},
- 	default: 'Text',
- 	description: 'Type of the asset',
-},
-{
- 	displayName: 'Value',
- 	name: 'value',
- 	type: 'string',
- 	displayOptions: {
- 		show: {
- 			resource: ['assets'],
- 			operation: ['createAsset','updateAsset'],
- 		},
- 	},
- 	default: '',
- 	description: 'Asset value (plain text or JSON for KeyValueList)',
-},
-{
- 	displayName: 'Robot Value',
- 	name: 'robotValue',
- 	type: 'string',
- 	displayOptions: {
- 		show: {
- 			resource: ['assets'],
- 			operation: ['createAsset','updateAsset'],
- 		},
- 	},
- 	default: '',
- 	description: 'Optional robot-specific value',
-},
-{
- 	displayName: 'Robot Id',
- 	name: 'robotId',
- 	type: 'number',
- 	displayOptions: {
- 		show: {
- 			resource: ['assets'],
- 			operation: ['createAsset','updateAsset'],
- 		},
- 	},
- 	default: 0,
- 	description: 'Optional robot numeric id for robot-specific value',
-},
+	// Create / Update operation fields
+	{
+		displayName: 'Asset Name',
+		name: 'name',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['assets'],
+				operation: ['createAsset', 'updateAsset'],
+			},
+		},
+		default: '',
+		required: true,
+		description: 'Name of the asset',
+	},
+	{
+		displayName: 'Value Type',
+		name: 'valueType',
+		type: 'options',
+		options: [
+			{ name: 'Text', value: 'Text' },
+			{ name: 'Credential', value: 'Credential' },
+			{ name: 'Certificate', value: 'Certificate' },
+			{ name: 'KeyValueList', value: 'KeyValueList' },
+		],
+		displayOptions: {
+			show: {
+				resource: ['assets'],
+				operation: ['createAsset', 'updateAsset'],
+			},
+		},
+		default: 'Text',
+		description: 'Type of the asset',
+	},
+	{
+		displayName: 'Value',
+		name: 'value',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['assets'],
+				operation: ['createAsset', 'updateAsset'],
+			},
+		},
+		default: '',
+		description: 'Asset value (plain text or JSON for KeyValueList)',
+	},
+	{
+		displayName: 'Robot Value',
+		name: 'robotValue',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['assets'],
+				operation: ['createAsset', 'updateAsset'],
+			},
+		},
+		default: '',
+		description: 'Optional robot-specific value',
+	},
+	{
+		displayName: 'Robot Id',
+		name: 'robotId',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['assets'],
+				operation: ['createAsset', 'updateAsset'],
+			},
+		},
+		default: 0,
+		description: 'Optional robot numeric id for robot-specific value',
+	},
 
-// Get / Delete Asset fields
-{
- 	displayName: 'Asset ID',
- 	name: 'assetId',
- 	type: 'string',
- 	displayOptions: {
- 		show: {
- 			resource: ['assets'],
- 			operation: ['getAsset','updateAsset','deleteAsset'],
- 		},
- 	},
- 	default: '',
- 	required: true,
- 	description: 'The unique identifier of the asset',
-},
+	// Get / Delete Asset fields
+	{
+		displayName: 'Asset ID',
+		name: 'assetId',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getAssetsById',
+		},
+		displayOptions: {
+			show: {
+				resource: ['assets'],
+				operation: ['getAsset', 'updateAsset', 'deleteAsset'],
+			},
+		},
+		default: '',
+		required: true,
+		description: 'The unique identifier of the asset',
+	},
 ];

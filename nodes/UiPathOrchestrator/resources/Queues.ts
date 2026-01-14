@@ -148,7 +148,10 @@ export const queuesFields: INodeProperties[] = [
 	{
 		displayName: 'Queue Name',
 		name: 'queueName',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getQueues',
+		},
 		displayOptions: {
 			show: {
 				resource: ['queues'],
@@ -163,7 +166,10 @@ export const queuesFields: INodeProperties[] = [
 	{
 		displayName: 'Queue Name',
 		name: 'Name',
-		type: 'string',
+		type: 'options',
+		typeOptions: {
+			loadOptionsMethod: 'getQueues',
+		},
 		displayOptions: {
 			show: {
 				resource: ['queues'],
