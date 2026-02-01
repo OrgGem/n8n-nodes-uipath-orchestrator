@@ -1,6 +1,6 @@
 # n8n-nodes-uipath-orchestrator
 
-![Version](https://img.shields.io/badge/version-1.4.6-blue)
+![Version](https://img.shields.io/badge/version-1.6.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 A comprehensive n8n community node for integrating with **UiPath Orchestrator**, enabling automation of RPA workflows, job management, asset handling, and queue operations directly from n8n.
@@ -24,8 +24,18 @@ A comprehensive n8n community node for integrating with **UiPath Orchestrator**,
 - **Assets** (7 operations, 100% ✅): Asset and credential management, robot-scoped asset APIs and sharing
 - **Buckets** (4 operations, 100% ✅): File storage and sharing operations
 - **AuditLogs** (3 operations, 100% ✅): Audit and event log retrieval and export
-- **Queues** (expanded): Queue item and transaction management (includes comments, events, transactions, bulk add)
+- **Queues** (expanded): Queue item and transaction management
 - **Custom API Call** (NEW! 🚀): Make custom requests to any UiPath Orchestrator endpoint with full control over method, headers, query params, and body
+
+### ✅ Dynamic Data Loading (NEW! ⚡)
+- **Searchable Dropdowns**: Automatically fetch options from Orchestrator for:
+  - **Queues** (Queue Names)
+  - **Processes** (Release Keys)
+  - **Jobs** (Job IDs)
+  - **Buckets** (Bucket Names/IDs)
+  - **Assets** (Asset Names/IDs)
+- **Filtering**: Live search within the dropdown for faster entity selection
+- **Error Handling**: Clear error messages if loading fails (e.g. permissions/network issues)
 
 ### ✅ Flexible Configuration
 - Custom API endpoints (on-premise support)
@@ -599,12 +609,18 @@ Limit operations to specific organizational units:
 
 ---
 
-## 📝 Recent Changes (v1.4.6)
+## 📝 Recent Changes (v1.6.0)
 
 ### 🚀 Major Updates
 
 #### New Features
-- ✅ **Custom API Call Resource** (NEW!): Make custom API requests to any UiPath Orchestrator endpoint
+- ✅ **Dynamic Load Options** (NEW!): Replaced manual text inputs with dynamic, searchable dropdowns for:
+  - **Queues**: Select Queue Name from list
+  - **Processes**: Select Release Key (Process) from list
+  - **Jobs**: Select Job ID from list (shows Release Name + State + Time)
+  - **Assets**: Select Asset Name/ID from list
+  - **Buckets**: Select Bucket Name/ID from list
+- ✅ **Custom API Call Resource**: Make custom API requests to any UiPath Orchestrator endpoint (Added in v1.5.0)
   - Full HTTP method support (GET, POST, PUT, PATCH, DELETE)
   - Flexible query parameters (UI builder or JSON format)
   - Custom headers support

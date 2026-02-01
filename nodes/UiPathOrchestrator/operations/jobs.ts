@@ -19,10 +19,10 @@ export async function executeJobsOperations(
 		);
 		responseData = responseData.value;
 	} else if (operation === 'get') {
-		const jobId = this.getNodeParameter('jobId', i) as number;
+		const jobId = this.getNodeParameter('jobId', i, 0, { extractValue: true }) as number;
 		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/Jobs(${jobId})`);
 	} else if (operation === 'startJobs') {
-		const releaseKey = this.getNodeParameter('releaseKey', i) as string;
+		const releaseKey = this.getNodeParameter('releaseKey', i, '', { extractValue: true }) as string;
 		const strategy = this.getNodeParameter('strategy', i) as string;
 		const inputArgumentsStr = this.getNodeParameter('inputArguments', i) as string;
 		const noOfRobots = this.getNodeParameter('noOfRobots', i) as number;
@@ -64,14 +64,14 @@ export async function executeJobsOperations(
 
 		const qs: IDataObject = {};
 		const headers: IDataObject = {};
-		
+
 		// Handle optional OData query parameters
 		const expand = this.getNodeParameter('$expand', i, '') as string;
 		const filter = this.getNodeParameter('$filter', i, '') as string;
 		const select = this.getNodeParameter('$select', i, '') as string;
 		const orderby = this.getNodeParameter('$orderby', i, '') as string;
 		const count = this.getNodeParameter('$count', i, false) as boolean;
-		
+
 		if (expand) qs.$expand = expand;
 		if (filter) qs.$filter = filter;
 		if (select) qs.$select = select;
@@ -126,7 +126,9 @@ export async function executeJobsOperations(
 			headers,
 		);
 	} else if (operation === 'restartJob') {
-		const jobId = this.getNodeParameter('jobId', i) as number;
+		const jobIdParam = this.getNodeParameter('jobId', i) as string | number | { value: string | number };
+		const jobIdVal = typeof jobIdParam === 'object' && jobIdParam !== null ? jobIdParam.value : jobIdParam;
+		const jobId = typeof jobIdVal === 'string' ? parseInt(jobIdVal, 10) : (jobIdVal as number);
 
 		const body = {
 			jobId: jobId,
@@ -171,7 +173,8 @@ export async function executeJobsOperations(
 			qs,
 		);
 	} else if (operation === 'validateJob') {
-		const releaseKey = this.getNodeParameter('releaseKey', i) as string;
+		const releaseKeyParam = this.getNodeParameter('releaseKey', i) as string | { value: string };
+		const releaseKey = typeof releaseKeyParam === 'object' ? releaseKeyParam.value : releaseKeyParam;
 		const inputArgumentsStr = this.getNodeParameter('inputArguments', i) as string;
 		const expand = this.getNodeParameter('$expand', i, '') as string;
 		const select = this.getNodeParameter('$select', i, '') as string;
@@ -211,7 +214,9 @@ export async function executeJobsOperations(
 		);
 		responseData = responseData.validationResults || responseData;
 	} else if (operation === 'stopJob') {
-		const jobId = this.getNodeParameter('jobId', i) as number;
+		const jobIdParam = this.getNodeParameter('jobId', i) as string | number | { value: string | number };
+		const jobIdVal = typeof jobIdParam === 'object' && jobIdParam !== null ? jobIdParam.value : jobIdParam;
+		const jobId = typeof jobIdVal === 'string' ? parseInt(jobIdVal, 10) : (jobIdVal as number);
 		const stopStrategy = this.getNodeParameter('stopStrategy', i) as string;
 
 		// Fix: Include both jobId and strategy in body per API specification
@@ -227,7 +232,9 @@ export async function executeJobsOperations(
 			body,
 		);
 	} else if (operation === 'validateExistingJob') {
-		const jobId = this.getNodeParameter('jobId', i) as number;
+		const jobIdParam = this.getNodeParameter('jobId', i) as string | number | { value: string | number };
+		const jobIdVal = typeof jobIdParam === 'object' && jobIdParam !== null ? jobIdParam.value : jobIdParam;
+		const jobId = typeof jobIdVal === 'string' ? parseInt(jobIdVal, 10) : (jobIdVal as number);
 		const expand = this.getNodeParameter('$expand', i, '') as string;
 		const select = this.getNodeParameter('$select', i, '') as string;
 

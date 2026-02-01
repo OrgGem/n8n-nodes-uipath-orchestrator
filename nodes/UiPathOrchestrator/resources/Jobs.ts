@@ -131,36 +131,64 @@ export const jobsOperations: INodeProperties[] = [
 	{
 		displayName: 'Job ID',
 		name: 'jobId',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getJobs',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Job ID',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getJobs',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Job ID',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Job ID',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['jobs'],
 				operation: ['get'],
 			},
 		},
-		required: true,
-		default: '',
 		description: 'The ID of the job to retrieve',
 	},
 	// StartJobs operation fields
 	{
 		displayName: 'Release Key',
 		name: 'releaseKey',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getProcesses',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Release Key',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getProcesses',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Release Key',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Release Key',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['jobs'],
 				operation: ['startJobs'],
 			},
 		},
-		required: true,
-		default: '',
 		description: 'The unique identifier (key/GUID) of the process release to start',
 	},
 	{
@@ -248,18 +276,32 @@ export const jobsOperations: INodeProperties[] = [
 	{
 		displayName: 'Job ID',
 		name: 'jobId',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getJobs',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Job ID',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getJobs',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Job ID',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Job ID',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['jobs'],
 				operation: ['stopJobs'],
 			},
 		},
-		required: true,
-		default: '',
 		description: 'The ID of the job to stop',
 	},
 	{
@@ -291,18 +333,32 @@ export const jobsOperations: INodeProperties[] = [
 	{
 		displayName: 'Job ID',
 		name: 'jobId',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getJobs',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Job ID',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getJobs',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Job ID',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Job ID',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['jobs'],
 				operation: ['restartJob'],
 			},
 		},
-		required: true,
-		default: '',
 		description: 'The ID of the job to restart',
 	},
 	// ResumeJob operation fields
@@ -351,18 +407,32 @@ export const jobsOperations: INodeProperties[] = [
 	{
 		displayName: 'Release Key',
 		name: 'releaseKey',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getProcesses',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Release Key',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getProcesses',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Release Key',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Release Key',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['jobs'],
 				operation: ['validateJob'],
 			},
 		},
-		required: true,
-		default: '',
 		description: 'The unique identifier (key/GUID) of the process release to validate',
 	},
 	{

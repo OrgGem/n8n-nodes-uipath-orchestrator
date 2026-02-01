@@ -103,7 +103,10 @@ async function uiPathApiRequest(
 ): Promise<any> {
 	const credentials = await this.getCredentials('uiPathOAuth2');
 	if (!credentials) {
-		throw new NodeOperationError(this.getNode(), 'No credentials provided');
+		if (this.getNode) {
+			throw new NodeOperationError(this.getNode(), 'No credentials provided');
+		}
+		throw new Error('No credentials provided');
 	}
 
 	const {
@@ -149,10 +152,13 @@ async function uiPathApiRequest(
 			ignoreSsl,
 		);
 	} catch (error) {
-		throw new NodeOperationError(
-			this.getNode(),
-			`OAuth authentication failed: ${(error as Error).message}`,
-		);
+		if (this.getNode) {
+			throw new NodeOperationError(
+				this.getNode(),
+				`OAuth authentication failed: ${(error as Error).message}`,
+			);
+		}
+		throw new Error(`OAuth authentication failed: ${(error as Error).message}`);
 	}
 
 	// Build base URL - support custom endpoints and on-prem serverUrl
@@ -212,7 +218,11 @@ async function uiPathApiRequest(
 		return response.data;
 	} catch (error) {
 		if (axios.isAxiosError(error)) {
-			throw new NodeApiError(this.getNode(), error as unknown as JsonObject);
+			const errorData = error.response?.data || { message: error.message };
+			if (this.getNode) {
+				throw new NodeApiError(this.getNode(), errorData as JsonObject);
+			}
+			throw new Error(`UiPath API Request failed: ${JSON.stringify(errorData)}`);
 		}
 		throw error;
 	}
@@ -230,14 +240,15 @@ async function uiPathApiRequestAllItems(
 
 	let responseData;
 	query = query || {};
-	query.take = 100;
-	query.skip = 0;
+	query.$top = 100;
+	query.$skip = 0;
 
 	do {
 		responseData = await uiPathApiRequest.call(this, method, endpoint, body, query);
-		query.skip = (query.skip || 0) + 100;
-		returnData.push(...responseData[propertyName]);
-	} while (responseData[propertyName] && responseData[propertyName].length !== 0);
+		const items = responseData[propertyName] || [];
+		returnData.push(...items);
+		query.$skip = (query.$skip as number) + 100;
+	} while (responseData[propertyName] && responseData[propertyName].length === 100);
 
 	return returnData;
 }

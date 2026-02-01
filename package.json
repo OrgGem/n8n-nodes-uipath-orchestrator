@@ -1,12 +1,14 @@
 {
   "name": "n8n-nodes-uipath-orchestrator",
-  "version": "1.5.0",
-  "description": "n8n node for UiPath Orchestrator API",
+  "version": "1.6.1",
+  "description": "n8n node for UiPath Orchestrator API - with Dynamic Load Options & Custom API Support",
   "keywords": [
     "n8n-community-node-package",
     "uipath",
     "orchestrator",
-    "rpa"
+    "rpa",
+    "dynamic-loading",
+    "load-options"
   ],
   "license": "MIT",
   "author": "gemvn90",

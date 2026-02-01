@@ -6,6 +6,7 @@ import {
 	NodeOperationError,
 	ILoadOptionsFunctions,
 	INodePropertyOptions,
+	INodeListSearchResult,
 } from 'n8n-workflow';
 import { IDataObject } from 'n8n-workflow';
 
@@ -152,137 +153,134 @@ export class UiPathOrchestrator implements INodeType {
 	};
 
 	methods = {
-		loadOptions: {
-			async getQueues(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-				const returnData: INodePropertyOptions[] = [];
-				const responseData = await uiPathApiRequestAllItems.call(
-					this,
-					'value',
-					'GET',
-					'/odata/QueueDefinitions',
-				);
-				for (const item of responseData) {
-					returnData.push({
-						name: item.Name,
-						value: item.Name, // Using Name as value for many queue operations, checking if ID needed
-					});
-				}
-				return returnData;
-			},
-			async getQueuesById(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-				const returnData: INodePropertyOptions[] = [];
-				const responseData = await uiPathApiRequestAllItems.call(
-					this,
-					'value',
-					'GET',
-					'/odata/QueueDefinitions',
-				);
-				for (const item of responseData) {
-					returnData.push({
-						name: item.Name,
-						value: item.Id,
-					});
-				}
-				return returnData;
-			},
-			async getProcesses(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-				const returnData: INodePropertyOptions[] = [];
-				const responseData = await uiPathApiRequestAllItems.call(
-					this,
-					'value',
-					'GET',
-					'/odata/Releases',
-				);
-				for (const item of responseData) {
-					returnData.push({
-						name: item.Name,
-						value: item.Key,
-					});
-				}
-				return returnData;
-			},
-			async getJobs(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-				const returnData: INodePropertyOptions[] = [];
-				// Limit to last 50 jobs for performance
-				const responseData = await uiPathApiRequest.call(
-					this,
-					'GET',
-					'/odata/Jobs',
-					{},
-					{ $top: 50, $orderby: 'StartTime desc' }
-				);
-				const jobs = responseData.value || [];
-				for (const item of jobs) {
-					returnData.push({
-						name: `${item.ReleaseName} - ${item.State} (${item.StartTime})`,
-						value: item.Id,
-					});
-				}
-				return returnData;
-			},
-			async getBuckets(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-				const returnData: INodePropertyOptions[] = [];
-				const responseData = await uiPathApiRequestAllItems.call(
-					this,
-					'value',
-					'GET',
-					'/odata/Buckets',
-				);
-				for (const item of responseData) {
-					returnData.push({
-						name: item.Name,
-						value: item.Name, // Often used by name in API
-					});
-				}
-				return returnData;
-			},
-			async getBucketsById(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-				const returnData: INodePropertyOptions[] = [];
-				const responseData = await uiPathApiRequestAllItems.call(
-					this,
-					'value',
-					'GET',
-					'/odata/Buckets',
-				);
-				for (const item of responseData) {
-					returnData.push({
-						name: item.Name,
-						value: item.Id,
-					});
-				}
-				return returnData;
-			},
-			async getAssets(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-				const returnData: INodePropertyOptions[] = [];
-				const responseData = await uiPathApiRequestAllItems.call(
-					this,
-					'value',
-					'GET',
-					'/odata/Assets',
-				);
-				for (const item of responseData) {
-					returnData.push({
+		listSearch: {
+			async getQueues(this: ILoadOptionsFunctions, filter?: string): Promise<INodeListSearchResult> {
+				try {
+					const qs: IDataObject = { $top: 50 };
+					if (filter) {
+						qs.$filter = `contains(Name, '${filter.replace(/'/g, "''")}')`;
+					}
+					const responseData = await uiPathApiRequest.call(this, 'GET', '/odata/QueueDefinitions', {}, qs);
+					const results = (responseData.value || []).map((item: any) => ({
 						name: item.Name,
 						value: item.Name,
-					});
+					}));
+					return { results };
+				} catch (error) {
+					throw new Error(`Failed to load queues: ${(error as Error).message}`);
 				}
-				return returnData;
 			},
-			async getAssetsById(this: ILoadOptionsFunctions): Promise<INodePropertyOptions[]> {
-				const returnData: INodePropertyOptions[] = [];
-				const responseData = await uiPathApiRequestAllItems.call(
-					this,
-					'value',
-					'GET',
-					'/odata/Assets',
-				);
-				for (const item of responseData) {
-					returnData.push({
+			async getQueuesById(this: ILoadOptionsFunctions, filter?: string): Promise<INodeListSearchResult> {
+				try {
+					const qs: IDataObject = { $top: 50 };
+					if (filter) {
+						qs.$filter = `contains(Name, '${filter.replace(/'/g, "''")}')`;
+					}
+					const responseData = await uiPathApiRequest.call(this, 'GET', '/odata/QueueDefinitions', {}, qs);
+					const results = (responseData.value || []).map((item: any) => ({
 						name: item.Name,
 						value: item.Id,
-					});
+					}));
+					return { results };
+				} catch (error) {
+					throw new Error(`Failed to load queues by ID: ${(error as Error).message}`);
 				}
-				return returnData;
+			},
+			async getProcesses(this: ILoadOptionsFunctions, filter?: string): Promise<INodeListSearchResult> {
+				try {
+					const qs: IDataObject = { $top: 50 };
+					if (filter) {
+						qs.$filter = `contains(Name, '${filter.replace(/'/g, "''")}')`;
+					}
+					const responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Releases', {}, qs);
+					const results = (responseData.value || []).map((item: any) => ({
+						name: item.Name,
+						value: item.Key,
+					}));
+					return { results };
+				} catch (error) {
+					throw new Error(`Failed to load processes: ${(error as Error).message}`);
+				}
+			},
+			async getJobs(this: ILoadOptionsFunctions, filter?: string): Promise<INodeListSearchResult> {
+				try {
+					const qs: IDataObject = { $top: 50, $orderby: 'StartTime desc' };
+					if (filter) {
+						qs.$filter = `contains(ReleaseName, '${filter.replace(/'/g, "''")}')`;
+					}
+					const responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Jobs', {}, qs);
+					const results = (responseData.value || []).map((item: any) => ({
+						name: `${item.ReleaseName} - ${item.State} (${item.StartTime})`,
+						value: item.Id,
+					}));
+					return { results };
+				} catch (error) {
+					throw new Error(`Failed to load jobs: ${(error as Error).message}`);
+				}
+			},
+			async getBuckets(this: ILoadOptionsFunctions, filter?: string): Promise<INodeListSearchResult> {
+				try {
+					const qs: IDataObject = { $top: 50 };
+					if (filter) {
+						qs.$filter = `contains(Name, '${filter.replace(/'/g, "''")}')`;
+					}
+					const responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Buckets', {}, qs);
+					const results = (responseData.value || []).map((item: any) => ({
+						name: item.Name,
+						value: item.Name,
+					}));
+					return { results };
+				} catch (error) {
+					throw new Error(`Failed to load buckets: ${(error as Error).message}`);
+				}
+			},
+			async getBucketsById(this: ILoadOptionsFunctions, filter?: string): Promise<INodeListSearchResult> {
+				try {
+					const qs: IDataObject = { $top: 50 };
+					if (filter) {
+						qs.$filter = `contains(Name, '${filter.replace(/'/g, "''")}')`;
+					}
+					const responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Buckets', {}, qs);
+					const results = (responseData.value || []).map((item: any) => ({
+						name: item.Name,
+						value: item.Id,
+					}));
+					return { results };
+				} catch (error) {
+					throw new Error(`Failed to load buckets by ID: ${(error as Error).message}`);
+				}
+			},
+			async getAssets(this: ILoadOptionsFunctions, filter?: string): Promise<INodeListSearchResult> {
+				try {
+					const qs: IDataObject = { $top: 50 };
+					if (filter) {
+						qs.$filter = `contains(Name, '${filter.replace(/'/g, "''")}')`;
+					}
+					const responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Assets', {}, qs);
+					const results = (responseData.value || []).map((item: any) => ({
+						name: item.Name,
+						value: item.Name,
+					}));
+					return { results };
+				} catch (error) {
+					throw new Error(`Failed to load assets: ${(error as Error).message}`);
+				}
+			},
+			async getAssetsById(this: ILoadOptionsFunctions, filter?: string): Promise<INodeListSearchResult> {
+				try {
+					const qs: IDataObject = { $top: 50 };
+					if (filter) {
+						qs.$filter = `contains(Name, '${filter.replace(/'/g, "''")}')`;
+					}
+					const responseData = await uiPathApiRequest.call(this, 'GET', '/odata/Assets', {}, qs);
+					const results = (responseData.value || []).map((item: any) => ({
+						name: item.Name,
+						value: item.Id,
+					}));
+					return { results };
+				} catch (error) {
+					throw new Error(`Failed to load assets by ID: ${(error as Error).message}`);
+				}
 			},
 		},
 	};

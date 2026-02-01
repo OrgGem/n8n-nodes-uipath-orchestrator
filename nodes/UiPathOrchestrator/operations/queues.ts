@@ -10,7 +10,7 @@ export async function executeQueuesOperations(
 	let responseData;
 
 	if (operation === 'addQueueItem') {
-		const Name = this.getNodeParameter('Name', i, '') as string;
+		const Name = this.getNodeParameter('Name', i, '', { extractValue: true }) as string;
 
 		if (!Name.trim()) {
 			throw new NodeOperationError(this.getNode(), 'Name (queue name) is required');
@@ -71,7 +71,7 @@ export async function executeQueuesOperations(
 			body
 		);
 	} else if (operation === 'bulkAddQueueItems') {
-		const queueName = this.getNodeParameter('queueName', i) as string;
+		const queueName = this.getNodeParameter('queueName', i, '', { extractValue: true }) as string;
 		const commitType = this.getNodeParameter('commitType', i, 'AllOrNothing') as string;
 		const bulkItemsStr = this.getNodeParameter('bulkItemsJson', i) as string;
 
@@ -409,7 +409,8 @@ export async function executeQueuesOperations(
 			body,
 		);
 	} else if (operation === 'startTransaction') {
-		const queueName = this.getNodeParameter('queueName', i) as string;
+		const queueNameParam = this.getNodeParameter('queueName', i) as string | { value: string };
+		const queueName = typeof queueNameParam === 'object' ? queueNameParam.value : queueNameParam;
 		const robotId = this.getNodeParameter('robotId', i) as number;
 
 		const transactionData: IDataObject = {

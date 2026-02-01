@@ -201,18 +201,32 @@ export const bucketsFields: INodeProperties[] = [
 	{
 		displayName: 'Bucket ID',
 		name: 'bucketId',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getBucketsById',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Bucket ID',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getBucketsById',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Bucket ID',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Bucket ID',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['buckets'],
 				operation: ['getFoldersForBucket'],
 			},
 		},
-		default: '',
-		required: true,
 		description: 'The bucket ID to get folders for',
 	},
 	{
@@ -306,18 +320,32 @@ export const bucketsFields: INodeProperties[] = [
 	{
 		displayName: 'Bucket ID',
 		name: 'bucketId',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getBucketsById',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Bucket ID',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getBucketsById',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Bucket ID',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Bucket ID',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['buckets'],
 				operation: ['getBucket', 'updateBucket', 'deleteBucket', 'getDirectories', 'listFiles', 'getFile', 'deleteFile', 'getReadUri', 'getWriteUri', 'shareToFolders'],
 			},
 		},
-		default: '',
-		required: true,
 		description: 'The unique identifier of the bucket',
 	},
 	{
@@ -351,18 +379,32 @@ export const bucketsFields: INodeProperties[] = [
 	{
 		displayName: 'Bucket ID',
 		name: 'bucketId',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getBucketsById',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Bucket ID',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getBucketsById',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Bucket ID',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Bucket ID',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['buckets'],
 				operation: ['updateBucket'],
 			},
 		},
-		default: '',
-		required: true,
 		description: 'The unique identifier of the bucket to update',
 	},
 
@@ -370,18 +412,32 @@ export const bucketsFields: INodeProperties[] = [
 	{
 		displayName: 'Bucket ID',
 		name: 'bucketId',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getBucketsById',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Bucket ID',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getBucketsById',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Bucket ID',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Bucket ID',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['buckets'],
 				operation: ['deleteBucket'],
 			},
 		},
-		default: '',
-		required: true,
 		description: 'The unique identifier of the bucket to delete',
 	},
 
@@ -430,18 +486,32 @@ export const bucketsFields: INodeProperties[] = [
 	{
 		displayName: 'Bucket ID',
 		name: 'bucketId',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getBucketsById',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Bucket ID',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getBucketsById',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Bucket ID',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Bucket ID',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['buckets'],
 				operation: ['listFiles'],
 			},
 		},
-		default: '',
-		required: true,
 		description: 'The Bucket ID',
 	},
 	{

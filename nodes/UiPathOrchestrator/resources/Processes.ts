@@ -64,18 +64,32 @@ export const processesFields: INodeProperties[] = [
 	{
 		displayName: 'Process Key',
 		name: 'processKeyDelete',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getProcesses',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Process Key',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getProcesses',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Process Key',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Process Key',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['processes'],
 				operation: ['deletePackage'],
 			},
 		},
-		default: '',
-		required: true,
 		description: 'The unique identifier of the process package to delete',
 	},
 	{
@@ -124,18 +138,32 @@ export const processesFields: INodeProperties[] = [
 	{
 		displayName: 'Process Key',
 		name: 'processKey',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getProcesses',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Process Key',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getProcesses',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Process Key',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Process Key',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['processes'],
 				operation: ['downloadPackage'],
 			},
 		},
-		default: '',
-		required: true,
 		description: 'The unique identifier of the process to download',
 	},
 	{
@@ -156,18 +184,32 @@ export const processesFields: INodeProperties[] = [
 	{
 		displayName: 'Process Key',
 		name: 'processKeyArgs',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getProcesses',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Process Key',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getProcesses',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Process Key',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Process Key',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['processes'],
 				operation: ['getArguments'],
 			},
 		},
-		default: '',
-		required: true,
 		description: 'The unique identifier of the process',
 	},
 	{
@@ -201,18 +243,32 @@ export const processesFields: INodeProperties[] = [
 	{
 		displayName: 'Process Key',
 		name: 'processKeySetArgs',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getProcesses',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Process Key',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getProcesses',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Process Key',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Process Key',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['processes'],
 				operation: ['setArguments'],
 			},
 		},
-		default: '',
-		required: true,
 		description: 'The unique identifier of the process (release key)',
 	},
 	{
@@ -235,18 +291,32 @@ export const processesFields: INodeProperties[] = [
 	{
 		displayName: 'Process ID',
 		name: 'processId',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getProcesses',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Process ID',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getProcesses',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Process ID',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Process ID',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['processes'],
 				operation: ['getProcessVersions'],
 			},
 		},
-		default: '',
-		required: true,
 		description: 'The ID of the process for which versions are fetched',
 	},
 	{

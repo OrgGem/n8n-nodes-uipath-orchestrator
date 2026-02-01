@@ -100,18 +100,32 @@ export const assetsFields: INodeProperties[] = [
 	{
 		displayName: 'Asset ID',
 		name: 'assetIdForFolders',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getAssetsById',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Asset ID',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getAssetsById',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Asset ID',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Asset ID',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['assets'],
 				operation: ['getFoldersForAsset'],
 			},
 		},
-		default: '',
-		required: true,
 		description: 'The asset id to query folders for',
 	},
 	{
@@ -158,17 +172,32 @@ export const assetsFields: INodeProperties[] = [
 	{
 		displayName: 'Asset Name',
 		name: 'assetName',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getAssets',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Asset Name',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getAssets',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Asset Name',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Asset Name',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['assets'],
 				operation: ['getRobotAsset', 'getRobotAssetByNameForRobotKey', 'getRobotAssetByRobotId', 'setRobotAssetByRobotKey'],
 			},
 		},
-		default: '',
 		description: 'The name of the asset',
 	},
 
@@ -406,18 +435,32 @@ export const assetsFields: INodeProperties[] = [
 	{
 		displayName: 'Asset ID',
 		name: 'assetId',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getAssetsById',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Asset ID',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getAssetsById',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Asset ID',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Asset ID',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['assets'],
 				operation: ['getAsset', 'updateAsset', 'deleteAsset'],
 			},
 		},
-		default: '',
-		required: true,
 		description: 'The unique identifier of the asset',
 	},
 ];

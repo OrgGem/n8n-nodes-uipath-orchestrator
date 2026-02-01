@@ -148,36 +148,64 @@ export const queuesFields: INodeProperties[] = [
 	{
 		displayName: 'Queue Name',
 		name: 'queueName',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getQueues',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Queue Name',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getQueues',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Queue Name',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Queue Name',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['queues'],
 				operation: ['startTransaction', 'bulkAddQueueItems'],
 			},
 		},
-		required: true,
-		default: '',
 		description: 'The name of the queue or queue definition ID',
 	},
 	// AddQueueItem operation fields
 	{
 		displayName: 'Queue Name',
 		name: 'Name',
-		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getQueues',
-		},
+		type: 'resourceLocator',
+		default: { mode: 'list', value: '' },
+		required: true,
+		modes: [
+			{
+				displayName: 'Queue Name',
+				name: 'list',
+				type: 'list',
+				typeOptions: {
+					searchListMethod: 'getQueues',
+					searchable: true,
+				},
+			},
+			{
+				displayName: 'Queue Name',
+				name: 'id',
+				type: 'string',
+				placeholder: 'Queue Name',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['queues'],
 				operation: ['addQueueItem'],
 			},
 		},
-		required: true,
-		default: '',
 		description: 'The name of the queue to add the item to',
 	},
 	{

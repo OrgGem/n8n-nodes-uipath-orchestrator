@@ -10,42 +10,42 @@ export async function executeProcessesOperations(
 	let responseData;
 
 	if (operation === 'deletePackage') {
-		const processKey = this.getNodeParameter('processKeyDelete', i) as string;
+		const processKey = this.getNodeParameter('processKeyDelete', i, '', { extractValue: true }) as string;
 		const feedId = this.getNodeParameter('feedIdDelete', i, '') as string;
-		
+
 		// Validate required parameter
 		if (!processKey) {
 			throw new NodeOperationError(this.getNode(), 'Process key is required');
 		}
-		
+
 		// URL encode the process key to handle special characters
 		// Use Processes entity set per UiPath on-premise API v16.0 swagger
 		let url = `/odata/Processes('${encodeURIComponent(processKey)}')`;
 		if (feedId) url += `?feedId=${encodeURIComponent(feedId)}`;
-		
+
 		responseData = await uiPathApiRequest.call(this, 'DELETE', url);
 		responseData = { success: true, key: processKey };
 	} else if (operation === 'downloadPackage') {
-		const processKey = this.getNodeParameter('processKey', i) as string;
+		const processKey = this.getNodeParameter('processKey', i, '', { extractValue: true }) as string;
 		const feedId = this.getNodeParameter('feedId', i, '') as string;
-		
+
 		// Validate required parameter
 		if (!processKey) {
 			throw new NodeOperationError(this.getNode(), 'Process key is required');
 		}
-		
+
 		// NOTE: This operation returns binary data (package file .nupkg)
 		// Currently returns the raw response. For full binary handling, would need:
 		// 1. Request with { encoding: null, json: false }
 		// 2. Buffer handling with this.helpers.prepareBinaryData()
 		// 3. Return format: { json: {...}, binary: { data: binaryItem } }
-		
+
 		// Use Processes entity set per UiPath on-premise API v16.0 swagger
 		let url = `/odata/Processes/UiPath.Server.Configuration.OData.DownloadPackage(key='${encodeURIComponent(processKey)}')`;
 		if (feedId) url += `?feedId=${encodeURIComponent(feedId)}`;
-		
+
 		responseData = await uiPathApiRequest.call(this, 'GET', url);
-		
+
 		// Add metadata to response
 		if (!responseData || typeof responseData !== 'object') {
 			responseData = {
@@ -57,11 +57,11 @@ export async function executeProcessesOperations(
 	} else if (operation === 'getAll') {
 		const take = this.getNodeParameter('take', i, 20) as number;
 		const skip = this.getNodeParameter('skip', i, 0) as number;
-		
+
 		// Build URL with proper validation
 		const topValue = Math.min(take > 0 ? take : 20, 1000);
 		const skipValue = skip > 0 ? skip : 0;
-		
+
 		// Use Processes entity set per UiPath on-premise API v16.0 swagger
 		responseData = await uiPathApiRequest.call(
 			this,
@@ -70,28 +70,28 @@ export async function executeProcessesOperations(
 		);
 		responseData = responseData.value || responseData;
 	} else if (operation === 'getArguments') {
-		const processKey = this.getNodeParameter('processKeyArgs', i) as string;
+		const processKey = this.getNodeParameter('processKeyArgs', i, '', { extractValue: true }) as string;
 		const expand = this.getNodeParameter('expandArgs', i, '') as string;
 		const select = this.getNodeParameter('selectArgs', i, '') as string;
-		
+
 		// Validate required parameter
 		if (!processKey) {
 			throw new NodeOperationError(this.getNode(), 'Process key is required');
 		}
-		
+
 		const qs: any = {};
 		if (expand) qs.$expand = expand;
 		if (select) qs.$select = select;
-		
+
 		// Use Processes entity set per UiPath on-premise API v16.0 swagger
 		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/Processes/UiPath.Server.Configuration.OData.GetArguments(key='${encodeURIComponent(processKey)}')`, {}, qs);
-		
+
 		// Normalize response structure
 		if (responseData && responseData.value !== undefined) {
 			responseData = responseData.value;
 		}
 	} else if (operation === 'getProcessVersions') {
-		const processId = this.getNodeParameter('processId', i) as string;
+		const processId = this.getNodeParameter('processId', i, '', { extractValue: true }) as string;
 		const feedId = this.getNodeParameter('feedIdVersions', i, '') as string;
 		const expand = this.getNodeParameter('expandVersions', i, '') as string;
 		const filter = this.getNodeParameter('filterVersions', i, '') as string;
@@ -115,7 +115,7 @@ export async function executeProcessesOperations(
 		if (top && top > 0) qs.$top = Math.min(top, 1000);
 		if (skip && skip > 0) qs.$skip = skip;
 		if (count) qs.$count = true;
-		
+
 		// Use Processes entity set per UiPath on-premise API v16.0 swagger
 		responseData = await uiPathApiRequest.call(this, 'GET', `/odata/Processes/UiPath.Server.Configuration.OData.GetProcessVersions(processId='${encodeURIComponent(processId)}')`, {}, qs);
 		responseData = responseData.value || responseData;
@@ -129,7 +129,7 @@ export async function executeProcessesOperations(
 		// 3. this.helpers.getBinaryDataBuffer() to get file buffer
 		// 4. Multipart form-data construction with file metadata
 		// 5. Custom headers: 'Content-Type': 'multipart/form-data'
-		
+
 		// Current implementation provides a placeholder response
 		throw new NodeOperationError(
 			this.getNode(),
@@ -137,7 +137,7 @@ export async function executeProcessesOperations(
 			'This operation requires multipart/form-data file upload support. ' +
 			'Please use the UiPath Orchestrator web interface or API directly for package uploads.'
 		);
-		
+
 		// Placeholder for future implementation:
 		// const binaryPropertyName = this.getNodeParameter('binaryPropertyName', i, 'data') as string;
 		// const binaryData = this.helpers.assertBinaryData(i, binaryPropertyName);
@@ -148,23 +148,23 @@ export async function executeProcessesOperations(
 		// 
 		// responseData = await uiPathApiRequest.call(this, 'POST', url, formData, {}, headers);
 	} else if (operation === 'setArguments') {
-		const processKey = this.getNodeParameter('processKeySetArgs', i) as string;
+		const processKey = this.getNodeParameter('processKeySetArgs', i, '', { extractValue: true }) as string;
 		const argumentsStr = this.getNodeParameter('arguments', i, '{}') as string;
-		
+
 		// Validate required parameter
 		if (!processKey) {
 			throw new NodeOperationError(this.getNode(), 'Process key is required');
 		}
-		
+
 		// Parse and validate arguments JSON
 		let argumentsObj: any = {};
 		try {
 			argumentsObj = JSON.parse(argumentsStr || '{}');
-			
+
 			if (typeof argumentsObj !== 'object' || Array.isArray(argumentsObj)) {
 				throw new Error('Arguments must be a JSON object, not an array');
 			}
-			
+
 			// Validate argument structure
 			for (const [argName, argValue] of Object.entries(argumentsObj)) {
 				if (typeof argValue !== 'object' || argValue === null) {
@@ -177,12 +177,12 @@ export async function executeProcessesOperations(
 				`Invalid JSON in Arguments: ${(error as Error).message}`
 			);
 		}
-		
+
 		const body = {
 			key: processKey,
 			arguments: argumentsObj,
 		};
-		
+
 		// Use Processes entity set per UiPath on-premise API v16.0 swagger
 		responseData = await uiPathApiRequest.call(
 			this,
@@ -190,7 +190,7 @@ export async function executeProcessesOperations(
 			'/odata/Processes/UiPath.Server.Configuration.OData.SetArguments',
 			body,
 		);
-		
+
 		// Provide explicit success response
 		if (!responseData || typeof responseData !== 'object') {
 			responseData = {
